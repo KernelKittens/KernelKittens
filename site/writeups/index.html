@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
+  <meta name="description" content="Technical challenge walkthroughs, exploit notes, and community submissions organized by competition.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#060606">
   <link rel="canonical" href="https://kernelkittens.team/writeups/">
@@ -11,12 +11,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Kernel Kittens">
   <meta property="og:title" content="Write-ups | Kernel Kittens">
-  <meta property="og:description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
+  <meta property="og:description" content="Technical challenge walkthroughs, exploit notes, and community submissions organized by competition.">
   <meta property="og:url" content="https://kernelkittens.team/writeups/">
   <meta property="og:image" content="https://kernelkittens.team/brand/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Write-ups | Kernel Kittens">
-  <meta name="twitter:description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
+  <meta name="twitter:description" content="Technical challenge walkthroughs, exploit notes, and community submissions organized by competition.">
   <meta name="twitter:image" content="https://kernelkittens.team/brand/og-image.png">
   <title>Write-ups | Kernel Kittens</title>
   <link rel="stylesheet" href="/assets/theme.css">
@@ -40,81 +40,106 @@
       <header class="archive-intro">
         <p class="path-label">/writeups</p>
         <h1>Write-ups</h1>
-        <p class="archive-lede">Technical walkthroughs and exploit notes. Released only after events close.</p>
+        <p class="archive-lede">Technical walkthroughs and exploit notes sorted by CTF event. Released only after competitions conclude.</p>
         <div class="archive-links" style="margin-top: 1rem;">
-          <a class="archive-action" href="#submit">[Submit a write-up]</a>
-          <a class="archive-action" href="https://calendar.kernelkittens.team/" target="_blank" rel="noopener noreferrer">[CTF Calendar]</a>
-          <a class="archive-action" href="/apply/">[Challenge: stray.rar]</a>
+          <a class="archive-action" href="#kaspersky">[Kaspersky SAS CTF]</a>
+          <a class="archive-action" href="#bushbash">[BushBash CTF]</a>
+          <a class="archive-action" href="#research">[Offensive Research]</a>
+          <a class="archive-action" href="#submit">[Submit Solve]</a>
         </div>
       </header>
       <div class="archive-body">
 
-<section class="archive-section" aria-labelledby="writeup-kcat-title">
+<section class="archive-section" id="kaspersky" aria-labelledby="kaspersky-archive-title">
   <article class="archive-record">
-    <p class="path-label">SOLVE 2026 / pwn (kernel uaf)</p>
-    <h2 id="writeup-kcat-title">Slab Leaks to Root: Linux 6.6 Kernel Heap UAF</h2>
-    <p>Target: Linux kernel 6.6.14 character device with KASLR, SMEP, SMAP, and kpti.</p>
-    <p>A note management ioctl failed to null freed pointers on delete. We groomed kmalloc-128 with seq_operations to defeat KASLR, manipulated msg_msg headers across message queues, and pointed modprobe_path to our payload script for root execution.</p>
+    <p class="path-label">EVENT ARCHIVE / 22 confirmed solves</p>
+    <h2 id="kaspersky-archive-title">Kaspersky SAS CTF 2026</h2>
+    <p>Twenty-two solved challenges across AI, Crypto, Forensics, Misc, Pwn, Reverse, and Web. Includes verified exploit scripts, bug breakdowns, and command receipts.</p>
     <dl class="archive-meta">
-      <div><dt>Category</dt><dd>pwn / kernel</dd></div>
+      <div><dt>Placement</dt><dd>3 / 361 (NA/SA)</dd></div>
+      <div><dt>Europe Rank</dt><dd>1 / 52</dd></div>
+      <div><dt>Full Archive</dt><dd><a href="/writeups/kaspersky-sas-ctf-2026/">[Open 22 Solves]</a></dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" id="bushbash" aria-labelledby="bushbash-archive-title">
+  <article class="archive-record">
+    <p class="path-label">EVENT ARCHIVE / 7 confirmed solves / 1337_PwnSp4c3</p>
+    <h2 id="bushbash-archive-title">BushBash CTF 2026</h2>
+    <p>Seven confirmed solves from BushBash CTF 2026, hosted by ANU CSSA. Placed 1st out of 994 teams with all 28 challenges solved.</p>
+    <dl class="archive-meta">
+      <div><dt>Placement</dt><dd>1 / 994</dd></div>
+      <div><dt>Score</dt><dd>5,997 pts</dd></div>
+      <div><dt>Solves</dt><dd>28 / 28</dd></div>
+    </dl>
+  </article>
+
+  <div class="content-section">
+    <h3>The Eye (Crypto / Astro) - 497 pts</h3>
+    <p>Bypassed astrological cipher round functions to extract the target key. Solved with pycryptodomex.</p>
+    <p>Flag: <code>bushbash{happy-MAT4RlKI,k1-a-k0E-e-HiW4!}</code></p>
+  </div>
+
+  <div class="content-section">
+    <h3>Turned Around (Reverse Engineering) - 334 pts</h3>
+    <p>Decompiled esolang interpreter loop and reversed backward stack rotation constraints.</p>
+    <p>Flag: <code>bushbash{(d0Ub13*-*b4ck!}</code></p>
+  </div>
+
+  <div class="content-section">
+    <h3>chip (Hardware / Misc) - 300 pts</h3>
+    <p>Parsed Winbond W25Q16JV SPI flash dump and recovered firmware partition tables.</p>
+    <p>Flag: <code>bushbash{winbond, w25q16jv}</code></p>
+  </div>
+
+  <div class="content-section">
+    <h3>matrix_secrets (Machine Learning / Misc) - 300 pts</h3>
+    <p>Model weight differential extraction against PEFT adapter matrix layers.</p>
+    <p>Flag: <code>bushbash{vect0rl3ak}</code></p>
+  </div>
+
+  <div class="content-section">
+    <h3>Secret hidden website (Web) - 300 pts</h3>
+    <p>Certificate transparency log discovery on crt.sh identifying unlisted origin subdomains.</p>
+    <p>Flag: <code>bushbash{h0w-d1d-y0u-f1nd-th1s}</code></p>
+  </div>
+</section>
+
+<section class="archive-section" id="research" aria-labelledby="research-archive-title">
+  <p class="path-label">RESEARCH & QUALS / standalone solves</p>
+  <h2 id="research-archive-title">Offensive Research & Quals</h2>
+
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="path-label">PWN / kernel uaf</p>
+    <h3>Slab Leaks to Root: Linux 6.6 Kernel Heap UAF</h3>
+    <p>Groomed kmalloc-128 via seq_operations to defeat KASLR, manipulated msg_msg headers across queues, and pointed modprobe_path to our payload script for root execution.</p>
+    <dl class="archive-meta">
       <div><dt>Author</dt><dd>SHOOTTHEMESSENGER</dd></div>
-      <div><dt>Technique</dt><dd>modprobe_path</dd></div>
+      <div><dt>Target</dt><dd>Linux 6.6.14</dd></div>
+      <div><dt>Primitive</dt><dd>modprobe_path</dd></div>
     </dl>
   </article>
-</section>
 
-<section class="archive-section" aria-labelledby="writeup-crypto-title">
-  <article class="archive-record">
-    <p class="path-label">SOLVE 2026 / crypto (lattices)</p>
-    <h2 id="writeup-crypto-title">Biased Nonce Recovery: Lattices vs ECDSA secp256k1</h2>
-    <p>Target: Automated authentication service with a 4-bit truncated nonce RNG.</p>
-    <p>We modeled the top-zero nonce bias as an instance of the Hidden Number Problem (HNP). Constructing a 72x72 Kannan embedding matrix and running BKZ reduction in SageMath recovered the private scalar in 14 seconds.</p>
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="path-label">FORENSICS / memory analysis</p>
+    <h3>Ghost in the RAM: Hunting Sliver C2 Beacons</h3>
+    <p>Used Volatility 3 malfind to identify unlinked executable heaps inside spoolsv.exe. Carved the embedded Golang PE payload and extracted mTLS C2 configs via YARA.</p>
     <dl class="archive-meta">
-      <div><dt>Category</dt><dd>crypto</dd></div>
-      <div><dt>Author</dt><dd>Antsy</dd></div>
-      <div><dt>Technique</dt><dd>Kannan CVP / BKZ</dd></div>
-    </dl>
-  </article>
-</section>
-
-<section class="archive-section" aria-labelledby="writeup-rev-title">
-  <article class="archive-record">
-    <p class="path-label">SOLVE 2026 / reverse engineering (custom vm)</p>
-    <h2 id="writeup-rev-title">Unwinding the Yarn: Disassembling a Custom Bytecode VM</h2>
-    <p>Target: x86-64 ELF binary executing obfuscated bytecode in an isolated stack machine.</p>
-    <p>Extracted the 14-opcode dispatcher loop from Ghidra and wrote an automated disassembler. Transcribed the key validation constraints into a Python Z3 solver to invert the alternating circular shifts and extract the key.</p>
-    <dl class="archive-meta">
-      <div><dt>Category</dt><dd>reverse engineering</dd></div>
-      <div><dt>Author</dt><dd>Hoxed</dd></div>
-      <div><dt>Technique</dt><dd>Z3 SMT Solver</dd></div>
-    </dl>
-  </article>
-</section>
-
-<section class="archive-section" aria-labelledby="writeup-forensics-title">
-  <article class="archive-record">
-    <p class="path-label">SOLVE 2026 / forensics (memory carving)</p>
-    <h2 id="writeup-forensics-title">Ghost in the RAM: Hunting Sliver C2 Beacons in Windows Memory</h2>
-    <p>Target: 16GB Windows Server memory dump with unbacked RWX thread pool injection.</p>
-    <p>Used Volatility 3 malfind to identify unlinked executable heaps inside spoolsv.exe. Carved the embedded Golang PE payload and used YARA to recover the active mTLS C2 configuration profile from runtime RAM.</p>
-    <dl class="archive-meta">
-      <div><dt>Category</dt><dd>forensics</dd></div>
       <div><dt>Author</dt><dd>Deva_RP</dd></div>
-      <div><dt>Technique</dt><dd>Volatility 3 / YARA</dd></div>
+      <div><dt>Target</dt><dd>Windows Server</dd></div>
+      <div><dt>Tooling</dt><dd>Volatility 3 / YARA</dd></div>
     </dl>
   </article>
-</section>
 
-<section class="archive-section" aria-labelledby="writeup-web-title">
-  <article class="archive-record">
-    <p class="path-label">SOLVE 2026 / web (ssti to rce)</p>
-    <h2 id="writeup-web-title">Server-Side Lunch: SSTI to RCE in a Flask Application</h2>
-    <p>Target: Flask menu preview service running Python with unescaped Jinja2 formatting.</p>
-    <p>Input reflection into render_template_string allowed config enumeration. We traversed object subclasses to locate subprocess.Popen and executed arbitrary shell commands to capture the flag.</p>
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="path-label">WEB / ssti to rce</p>
+    <h3>Server-Side Lunch: SSTI to RCE in Flask</h3>
+    <p>Reflected input into render_template_string allowed config enumeration. We traversed object subclasses to locate subprocess.Popen and executed arbitrary shell commands.</p>
     <dl class="archive-meta">
-      <div><dt>Category</dt><dd>web</dd></div>
       <div><dt>Author</dt><dd>romil0xsec</dd></div>
-      <div><dt>Technique</dt><dd>Jinja2 Subclass RCE</dd></div>
+      <div><dt>Target</dt><dd>Flask / Jinja2</dd></div>
+      <div><dt>Primitive</dt><dd>Subclass RCE</dd></div>
     </dl>
   </article>
 </section>

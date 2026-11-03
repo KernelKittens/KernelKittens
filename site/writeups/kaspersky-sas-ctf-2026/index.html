@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Twenty-two solved challenges from the Kaspersky SAS CTF 2026, with the bug, the commands, and the verification behind each one.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
+  <meta name="theme-color" content="#060606">
+  <link rel="canonical" href="https://kernelkittens.team/writeups/kaspersky-sas-ctf-2026/">
+  <link rel="icon" href="/brand/kernel-kittens-mark.svg?v=team-logo-20260906" type="image/svg+xml">
+  <title>Kaspersky SAS CTF 2026 | Kernel Kittens</title>
+  <link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<div class="ready-archive-page">
+  <a class="skip-link" href="#ready-content">Skip to content</a>
+  <header class="ready-site-header">
+    <div class="ready-site-header__inner">
+      <a class="crew-identity" href="/" aria-label="Kernel Kittens home">
+        <svg class="crew-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 L 35.5 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z"/></svg>
+        <span class="crew-signature"><strong>Kernel Kittens</strong><small>est. 2026</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/" aria-current="page">[write-ups]</a></li><li><a href="/apply/">[apply]</a></li></ul>
+      </nav>
+    </div>
+  </header>
+  <main id="ready-content">
+    <div class="ready-page-shell">
+      <header class="archive-intro">
+        <p class="path-label">/writeups / kaspersky-sas-ctf-2026</p>
+        <h1>Kaspersky SAS CTF 2026</h1>
+        <p class="archive-lede">Twenty-two solved challenges across seven categories. Each record has the flag, the actual bug, the commands in the order that mattered, and what proved the answer.</p>
+        <p class="status-line">22 solves / 7 categories / August 2026</p>
+        <p><a href="/writeups/">back to write-ups</a></p>
+      </header>
+      <div class="archive-body writeup-body">
+
+<section class="writeup-toc" id="contents" aria-labelledby="contents-title">
+  <h2 id="contents-title">Contents</h2>
+  <ol>
+    <li><a href="#cold-dih">Cold DIH</a></li>
+    <li><a href="#censored">Censored</a></li>
+    <li><a href="#shiny-sweetie-curve">Shiny sweetie curve</a></li>
+    <li><a href="#toffifee">Toffifee</a></li>
+    <li><a href="#ping-pong-show">Ping Pong Show</a></li>
+    <li><a href="#ryan-guzling">Ryan Guzling</a></li>
+    <li><a href="#time-to-install-arch">Time to Install Arch</a></li>
+    <li><a href="#fluffy-transform">Fluffy Transform</a></li>
+    <li><a href="#good-pineapple">Good pineapple</a></li>
+    <li><a href="#queue">queue</a></li>
+    <li><a href="#one-last-babuin">One Last Babuin</a></li>
+    <li><a href="#rustyapa">RUSTyapa</a></li>
+    <li><a href="#slopgate">SlopGate</a></li>
+    <li><a href="#sunhua-gate">SunHua Gate</a></li>
+    <li><a href="#biblocker">biblocker</a></li>
+    <li><a href="#cimple">Cimple</a></li>
+    <li><a href="#wasmsafe">wasmsafe</a></li>
+    <li><a href="#yet-another-malware">Yet another malware</a></li>
+    <li><a href="#canary">Canary</a></li>
+    <li><a href="#frontrooms">Frontrooms</a></li>
+    <li><a href="#garden">Garden</a></li>
+    <li><a href="#skudik">SKUDik</a></li>
+  </ol>
+</section>
+
+<section class="flag-scroll" aria-labelledby="flags-title">
+  <table class="flag-table">
+    <caption id="flags-title">All 22 flags</caption>
+    <thead>
+      <tr><th scope="col">Category</th><th scope="col">Challenge</th><th scope="col">Flag</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">AI</th><td><a href="#cold-dih">Cold DIH</a></td><td>kaspersky{d0ct0r_d0nt_t3ll_m3_that_my_illn3ss_is_c0ld_dih}</td></tr>
+      <tr><th scope="row">Crypto</th><td><a href="#censored">Censored</a></td><td>kaspersky{N0w_4ll_tH3_4nsW3rs_4r3_1n_y0ur_h4nds!!!!}</td></tr>
+      <tr><th scope="row">Crypto</th><td><a href="#shiny-sweetie-curve">Shiny sweetie curve</a></td><td>kaspersky{g4mbl1ng_1s_b4d_t4k3_c4r3_0f_y0urs3lf}</td></tr>
+      <tr><th scope="row">Crypto</th><td><a href="#toffifee">Toffifee</a></td><td>kaspersky{a_s0und_pr00f_0f_an_uns0und_guest}</td></tr>
+      <tr><th scope="row">Forensics</th><td><a href="#ping-pong-show">Ping Pong Show</a></td><td>kaspersky{why_1s_th3r3_4_p1n9_p0n9_g4m3_4r3_u_j0kin9_m3}</td></tr>
+      <tr><th scope="row">Forensics</th><td><a href="#ryan-guzling">Ryan Guzling</a></td><td>kaspersky{1_th1nk_1t5_b3tt3r_t0_wr1t3_th3_k3y_0n_p4p3r}</td></tr>
+      <tr><th scope="row">Forensics</th><td><a href="#time-to-install-arch">Time to Install Arch</a></td><td>kaspersky{gR34sY_ch4nn3l_n0t_s0_sL1ck}</td></tr>
+      <tr><th scope="row">Misc</th><td><a href="#fluffy-transform">Fluffy Transform</a></td><td>kaspersky{p4ws_1n_th3_sp3ctrum}</td></tr>
+      <tr><th scope="row">Misc</th><td><a href="#good-pineapple">Good pineapple</a></td><td>kaspersky{g3t_h1dd3n_b4d_4ppl3d_676767}</td></tr>
+      <tr><th scope="row">Misc</th><td><a href="#queue">queue</a></td><td>kaspersky{9c974f24-1ec2-4d47-b32e-11fd9b961eda}</td></tr>
+      <tr><th scope="row">Pwn</th><td><a href="#one-last-babuin">One Last Babuin</a></td><td>kaspersky{L00ks_l1k3_th3_r0b0t_m4n4g3d_t0_wr1t3_4_symph0ny...But_wh4t_ab0ut_y0u?}</td></tr>
+      <tr><th scope="row">Pwn</th><td><a href="#rustyapa">RUSTyapa</a></td><td>kaspersky{n0b0dy_1s_p3rf3ct_4nd_3v3n_th3_c0mp1l3r_c4n_m4k3_m1s74k35}</td></tr>
+      <tr><th scope="row">Pwn</th><td><a href="#slopgate">SlopGate</a></td><td>kaspersky{I_th1nk_w3_b0th_g0t_dumb3r_wh1l3_s0lvin6_this_t4sk}</td></tr>
+      <tr><th scope="row">Pwn</th><td><a href="#sunhua-gate">SunHua Gate</a></td><td>kasperky{but_1t_c4tch3s_4ll_th3_3xcept10n5_4nd_n3v3r_f4ll}</td></tr>
+      <tr><th scope="row">Reverse</th><td><a href="#biblocker">biblocker</a></td><td>kaspersky{s1gn4l5_pr0v1d3d_tPm_k1nd4_sus}</td></tr>
+      <tr><th scope="row">Reverse</th><td><a href="#cimple">Cimple</a></td><td>kaspersky{1s_c1mpl3_s1mple_3n0ugh_1ab7d0159a87f}</td></tr>
+      <tr><th scope="row">Reverse</th><td><a href="#wasmsafe">wasmsafe</a></td><td>kaspersky{w4sm_3lectrif1ed_7d19ae15}</td></tr>
+      <tr><th scope="row">Reverse</th><td><a href="#yet-another-malware">Yet another malware</a></td><td>kaspersky{d0_y0u_l1k3_th1s3_p4st4?}</td></tr>
+      <tr><th scope="row">Web</th><td><a href="#canary">Canary</a></td><td>kaspersky{5688e9f664a7fa9bce6bbe8414ee6423}</td></tr>
+      <tr><th scope="row">Web</th><td><a href="#frontrooms">Frontrooms</a></td><td>kaspersky{w0w_l00ks_s0_pr0pr13t4ry_1_l0v3_th4t}</td></tr>
+      <tr><th scope="row">Web</th><td><a href="#garden">Garden</a></td><td>kaspersky{0ld_s4mur4i_w0u1d_b3_pr0u6}</td></tr>
+      <tr><th scope="row">Web</th><td><a href="#skudik">SKUDik</a></td><td>kaspersky{c32fccdd-762a-4321-8337-163c9b67325f}</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<article class="writeup-record" id="cold-dih" aria-labelledby="cold-dih-title">
+  <p class="path-label">AI / challenge API</p>
+  <h2 id="cold-dih-title">Cold DIH</h2>
+  <p class="status-line">Solved and accepted by the challenge API</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{d0ct0r_d0nt_t3ll_m3_that_my_illn3ss_is_c0ld_dih}</code></p>
+  <div class="content-section">
+    <h3>What the server checked</h3>
+    <p>Three speech checks ran over the submitted audio. One file had to produce the exact target text through the challenge PCM16 path, through its Opus path, and through a second speech model. Ordinary audio editing moved all three at once, so the solve came down to tiny sample changes with every output rechecked after each one.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Inspect the candidate audio without touching it.</p>
+        <pre class="code-block"><code>ffprobe -hide_banner -show_streams -show_format candidate.flac
+sha256sum candidate.flac</code></pre>
+        <p class="writeup-note"><code>ffprobe</code> reports codec, sample rate, channels, duration and container metadata. <code>sha256sum</code> gives the file a stable identity so a later test cannot quietly use a different version.</p></li>
+      <li class="application-step"><p>Produce the same codec forms the server uses.</p>
+        <pre class="code-block"><code>ffmpeg -y -i candidate.flac -ac 1 -ar 16000 -c:a pcm_s16le candidate.wav
+ffmpeg -y -i candidate.flac -ac 1 -ar 48000 -c:a libopus -b:a 64k candidate.opus</code></pre>
+        <p class="writeup-note">Mono, 16 kHz, signed 16-bit PCM for the first path and Opus for the second.</p></li>
+      <li class="application-step"><p>Run both speech models against both paths and compare every token against the required transcript. The first optimization pass pushed the Whisper token margins while leaving the other model alone. It got to 20 of 21 exact tokens.</p></li>
+      <li class="application-step"><p>Change half of one least significant bit across a balanced group of samples. That was the smallest change that flipped the last word, <code>Look</code>, without disturbing the other transcripts.</p></li>
+      <li class="application-step"><p>Re-encode and reload both models twice. Clean reloads matter, because cached model state can hide an unstable result.</p></li>
+      <li class="application-step"><p>Submit the final FLAC. The response came back <code>solved: true</code> with the flag.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The accepted file was <code>cold-dih-solved.flac</code> at 176,430 bytes. The source note records two clean model reloads and the accepted server response.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="censored" aria-labelledby="censored-title">
+  <p class="path-label">CRYPTO / live signing service</p>
+  <h2 id="censored-title">Censored</h2>
+  <p class="status-line">Solved twice against fresh sessions</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{N0w_4ll_tH3_4nsW3rs_4r3_1n_y0ur_h4nds!!!!}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The service signed with Schnorr, and its diagnostic output leaked a narrow interval containing each supposedly secret nonce. Partial nonce knowledge is enough to recover a Schnorr private key.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Identify and unpack the archive.</p>
+        <pre class="code-block"><code>sha256sum censoredcrypt_254b06c618983c7f.tar.gz
+tar -tzf censoredcrypt_254b06c618983c7f.tar.gz
+tar -xzf censoredcrypt_254b06c618983c7f.tar.gz</code></pre>
+        <p class="writeup-note"><code>tar -t</code> lists without extracting, so nothing lands on disk before it is checked.</p></li>
+      <li class="application-step"><p>Read the signing code and write the Schnorr relation for each sample.</p>
+        <pre class="code-block"><code>s_i = k_i + e_i * x mod q</code></pre>
+        <p class="writeup-note"><code>s_i</code> is the response, <code>k_i</code> the nonce, <code>e_i</code> the challenge hash, <code>x</code> the private key, <code>q</code> the group order.</p></li>
+      <li class="application-step"><p>Query 36 signatures. For each, use the public calibration value and the commitment to undo the XOR masks on the 18-bit diagnostic path. Every leak becomes an interval for <code>k_i</code>.</p></li>
+      <li class="application-step"><p>Turn the 36 interval equations into a Hidden Number Problem lattice, then solve with LLL plus nearest-plane CVP.</p>
+        <pre class="code-block"><code>python3 solve.py --samples 36</code></pre>
+        <p class="writeup-note">The solver collects samples, builds the lattice, reduces, finds the nearest lattice point and reconstructs <code>x</code>.</p></li>
+      <li class="application-step"><p>Check the recovered key before spending it.</p>
+        <pre class="code-block"><code>x * G == public_key</code></pre></li>
+      <li class="application-step"><p>Sign the required message with a fresh nonce and send it to <code>SUBMIT</code>. The service returned <code>ok: true</code> and the flag.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>A local synthetic test recovered a random 256-bit key exactly first. Two separate live sessions then each used 36 signatures, recovered a key matching the new public key, and returned the same flag.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="shiny-sweetie-curve" aria-labelledby="shiny-title">
+  <p class="path-label">CRYPTO / riffle-royale</p>
+  <h2 id="shiny-title">Shiny sweetie curve</h2>
+  <p class="status-line">Accepted by the live challenge in 1.761 seconds</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{g4mbl1ng_1s_b4d_t4k3_c4r3_0f_y0urs3lf}</code></p>
+  <div class="content-section">
+    <h3>The idea</h3>
+    <p>The server mixed two seven-value elliptic curve x-coordinate orbits with a stable riffle. The task was to recover the hidden curve and predict the x-coordinate at <code>N = 2^32 + 1609</code>.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and unpack the source.</p>
+        <pre class="code-block"><code>sha256sum static_c9fafffc59a47009.tar.gz
+tar -xzf static_c9fafffc59a47009.tar.gz</code></pre></li>
+      <li class="application-step"><p>Enumerate the 1,716 partitions that place sample 0 in the first lane. That reduces the stable riffle to testing two candidate seven-value sequences.</p></li>
+      <li class="application-step"><p>For adjacent x-coordinates, build the quadratic relation <code>D[i](r)</code> in <code>r = x(Q)</code>. Eliminate the curve coefficients with resultants, and the common integer factor exposes the field prime <code>p</code>.</p></li>
+      <li class="application-step"><p>Take a polynomial GCD modulo <code>p</code> to recover <code>r</code>, then solve the remaining linear equations for <code>a</code> and <code>b</code>.</p></li>
+      <li class="application-step"><p>Lift x-coordinates to curve points and test both y signs. Reject a partition unless every step advances by the same point <code>Q</code>.</p></li>
+      <li class="application-step"><p>Compute the target with ordinary double-and-add, then post the slot-0 value.</p>
+        <pre class="code-block"><code>3640664708522543359821365990389028278237346416127972626696953157794817140660</code></pre></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The solver was tested on a synthetic curve first. An independent review checked the resultant, the modular GCD and the curve recovery. The single orientation assumption was then confirmed by the server source and the accepted live result.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="toffifee" aria-labelledby="toffifee-title">
+  <p class="path-label">CRYPTO / SP1 prover 6.5.0</p>
+  <h2 id="toffifee-title">Toffifee</h2>
+  <p class="status-line">Solved with a locally verified SP1 proof</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{a_s0und_pr00f_0f_an_uns0und_guest}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The verifier kept its visible Toffoli gate counter in state slot 256, but reset only slots 0 through 255 before applying circuit initializers. Map a 257th wire onto slot 256 and an initializer can zero the counter after the circuit has already used real Toffoli gates.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify the inputs and read the guest binary statically.</p>
+        <pre class="code-block"><code>sha256sum challenge.tar.gz guest.elf
+readelf -h guest.elf
+readelf -s guest.elf | less</code></pre>
+        <p class="writeup-note"><code>-s</code> lists symbols, which is how the reset, the initializer, the gate evaluator and the committed values were found.</p></li>
+      <li class="application-step"><p>Reconstruct the state layout. Confirm that opcode 2 increments slot 256, that the reset loop stops before slot 256, and that initializers run after it.</p></li>
+      <li class="application-step"><p>Build an AES S-box with the 32-AND Boyar-Peralta network. Map 258 unique wires and add a zero initializer for the wire aliased onto slot 256.</p>
+        <pre class="code-block"><code>python3 build_circuit.py --output final.circuit
+sha256sum final.circuit</code></pre>
+        <p class="writeup-note">The final circuit was 3,748 bytes.</p></li>
+      <li class="application-step"><p>Test all 256 byte inputs against the real S-box truth table. The same run confirms 32 physical Toffoli gates but a verifier-visible count of zero.</p>
+        <pre class="code-block"><code>python3 test_circuit.py final.circuit</code></pre></li>
+      <li class="application-step"><p>Generate the proof and verify it locally before going anywhere near the live endpoint.</p>
+        <pre class="code-block"><code>./prove guest.elf final.circuit &gt; proof.bin
+./verify guest.elf proof.bin</code></pre>
+        <p class="writeup-note">The accepted proof was 1,272,613 bytes with committed Toffoli count 0.</p></li>
+      <li class="application-step"><p>Send the locally verified proof to <code>/submit</code>. It returned the flag.</p></li>
+    </ol>
+  </div>
+  <div class="content-section writeup-flagged">
+    <h3>Dead end worth knowing</h3>
+    <p>The first emulator reset too much state, which hid the bug entirely and produced an honest count of 32. Matching the guest's capped reset exactly was the whole trick.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="ping-pong-show" aria-labelledby="ping-pong-title">
+  <p class="path-label">FORENSICS / memory image plus UDP service</p>
+  <h2 id="ping-pong-title">Ping Pong Show</h2>
+  <p class="status-line">Solved with a protocol-faithful game client</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{why_1s_th3r3_4_p1n9_p0n9_g4m3_4r3_u_j0kin9_m3}</code></p>
+  <div class="content-section">
+    <h3>The chain</h3>
+    <p>The memory image held an Outlook attachment called <code>inquiry.js</code>. That script decrypted and decompressed a loader, the loader injected a Havoc Demon into <code>acrobat.exe</code>, and a later command pulled a second stage Ping Pong client that spoke a small UDP protocol named <code>PPG1</code>.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and extract the memory image, then get your bearings in it.</p>
+        <pre class="code-block"><code>7z x ram_013bc3c6203989de.7z
+python3 vol.py -f ram.bin windows.info
+python3 vol.py -f ram.bin windows.pslist</code></pre>
+        <p class="writeup-note"><code>windows.info</code> identifies Windows 10 x64 build 19041. <code>windows.pslist</code> confirmed the injected Acrobat process.</p></li>
+      <li class="application-step"><p>Reconstruct the PST message and its attachment. Base64-decode the blob, decrypt it with the recovered RC4 key, then LZNT1-decompress.</p></li>
+      <li class="application-step"><p>Reverse the loader and the Demon configuration. The first C2 was useful evidence but not the flag. That address and <code>acrobat.exe</code> were both submitted early as guesses and later retracted.</p></li>
+      <li class="application-step"><p>Decode command <code>0xA14</code> from the captured traffic. It downloaded the real game client.</p></li>
+      <li class="application-step"><p>Reverse the <code>PPG1</code> messages and write a clean UDP client that follows the state machine, plays to a 6-5 win, and waits for a type-5 <code>GameEnd</code> packet with outcome 1.</p>
+        <pre class="code-block"><code>python3 pingpong_client.py SERVER_IP SERVER_PORT</code></pre>
+        <p class="writeup-note">This client speaks the protocol. It does not run the malware.</p></li>
+      <li class="application-step"><p>Parse the returned packet. It began with <code>PPG1</code>, declared a 56-byte message, and carried exactly 56 message bytes with no trailing payload.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The victory packet was hashed and kept as evidence, and the server-issued victory text was the flag.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="ryan-guzling" aria-labelledby="guzling-title">
+  <p class="path-label">FORENSICS / 11.6 GB disk image set</p>
+  <h2 id="guzling-title">Ryan Guzling</h2>
+  <p class="status-line">Solved from the disk images through to the linked content</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{1_th1nk_1t5_b3tt3r_t0_wr1t3_th3_k3y_0n_p4p3r}</code></p>
+  <div class="content-section">
+    <h3>The chain</h3>
+    <p>Two halves of an Apple Fusion Drive plus a small trash image. The trash image held a FileVault recovery key, the decrypted Fusion Drive held a second encrypted sparsebundle, and that eventually pointed at a video URL whose public page metadata carried the flag.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and inventory the archive before extracting 11.6 GB of it.</p>
+        <pre class="code-block"><code>7z l guz_5d74556b5147018c.zip
+7z x guz_5d74556b5147018c.zip -oimages</code></pre>
+        <p class="writeup-note"><code>7z l</code> lists without extracting. <code>7z x</code> preserves paths.</p></li>
+      <li class="application-step"><p>Search the trash image for printable recovery material.</p>
+        <pre class="code-block"><code>strings -a -n 8 images/trash.dd | less</code></pre>
+        <p class="writeup-note"><code>-a</code> scans the whole image, <code>-n 8</code> drops short noise. This produced the FileVault recovery key.</p></li>
+      <li class="application-step"><p>Reconstruct the Fusion Drive, <code>ssd.dd</code> first and <code>hdd.dd</code> second at physical offset <code>209735680</code>, read-only. Current <code>libfvde</code> assumed the <code>0x0305</code> tree, so the virtual address parser had to be taught the newer <code>0x0304</code> records.</p></li>
+      <li class="application-step"><p>Mount the decrypted HFS+ volume read-only and read the stashed password.</p>
+        <pre class="code-block"><code>mount -o ro /dev/mapper/fusion-decrypted /mnt/fusion
+cat /mnt/fusion/usr/local/.pass</code></pre>
+        <p class="writeup-note"><code>-o ro</code> keeps the evidence unchanged.</p></li>
+      <li class="application-step"><p>Open <code>hranilka.sparsebundle</code> with that password, again read-only. Its <code>.secret.txt</code> contained the video URL.</p></li>
+      <li class="application-step"><p>Fetch the public watch page with no login and read <code>videoDetails.shortDescription</code>. The flag appeared six times, every occurrence identical.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The final assertion checked archive size and digest, the FileVault key, the inner filesystem, the <code>.secret.txt</code> URL, the video title, and one unique flag value.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="time-to-install-arch" aria-labelledby="arch-title">
+  <p class="path-label">FORENSICS / PCAP, VMDK, malware sample</p>
+  <h2 id="arch-title">Time to Install Arch</h2>
+  <p class="status-line">Solved from a fresh raw-PCAP decode</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{gR34sY_ch4nn3l_n0t_s0_sL1ck}</code></p>
+  <div class="content-section">
+    <h3>What was hidden</h3>
+    <p>The malware used TLS GREASE fields as a covert channel. Client and server used related counters, but the flag traveled in the server-to-client half. Client-side output like <code>whoami</code> was only command output, which is an easy place to stop too early.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify the evidence before parsing or mounting anything.</p>
+        <pre class="code-block"><code>sha256sum traffic.pcap disk.vmdk malware.exe
+file traffic.pcap disk.vmdk malware.exe</code></pre>
+        <p class="writeup-note"><code>file</code> identifies each format without executing it.</p></li>
+      <li class="application-step"><p>Pull the handshake fields and GREASE values out of the capture.</p>
+        <pre class="code-block"><code>tshark -r traffic.pcap -Y "tls.handshake" -T fields \
+  -e frame.number -e ip.src -e ip.dst -e tls.handshake.session_id &gt; handshakes.tsv</code></pre>
+        <p class="writeup-note">Keeping frame numbers lets decoded bytes be tied back to original packets.</p></li>
+      <li class="application-step"><p>Reverse the stream cipher. It used a fixed key with a custom ChaCha constant, the first 12 session-ID bytes as the nonce, a client counter of twice the little-endian final four bytes, and a server counter of that plus one.</p></li>
+      <li class="application-step"><p>Validate the implementation against a known internal block. Counter 0 with the known nonce had to reproduce the observed 64-byte keystream block before decoding anything else.</p></li>
+      <li class="application-step"><p>Decode both directions independently. Server counters 446, 447 and 448 were type-2 data records, counter 449 was the type-5 terminator.</p></li>
+      <li class="application-step"><p>Join the server records in counter order. Frames 257486, 257563 and 257679 carried the three flag pieces.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The decode was rerun from the raw PCAP. The exact frames rebuilt the flag and the following frame held the expected terminator, which beats trusting a string carved out of memory.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="fluffy-transform" aria-labelledby="fluffy-title">
+  <p class="path-label">MISC / 21 second WAV</p>
+  <h2 id="fluffy-title">Fluffy Transform</h2>
+  <p class="status-line">Solved and deterministically decoded</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{p4ws_1n_th3_sp3ctrum}</code></p>
+  <div class="content-section">
+    <h3>Signal layout</h3>
+    <p>Three amplitude-modulated carriers sit near 997 Hz, 2203 Hz and 4211 Hz. Their amplitudes form a moving three-dimensional vector: the movement draws a cat, and the timing of the movement carries Morse.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Inspect the audio. It is mono 48 kHz signed 16-bit PCM, 21.025 seconds, 1,009,200 samples.</p>
+        <pre class="code-block"><code>ffprobe -hide_banner challenge_f25cea1608c1e224.wav</code></pre></li>
+      <li class="application-step"><p>Look at the spectrum. Odd harmonics give away the 2203 Hz square carrier and the 4211 Hz triangle carrier.</p>
+        <pre class="code-block"><code>sox challenge_f25cea1608c1e224.wav -n stat -freq</code></pre></li>
+      <li class="application-step"><p>Split into 1,200-sample windows. At 48 kHz that is 25 ms per window, giving 841 positions and 840 movements.</p></li>
+      <li class="application-step"><p>Run a Hann-window matched filter at all three carrier frequencies, normalize the amplitudes, and take the distance between adjacent vectors.</p></li>
+      <li class="application-step"><p>Call any distance above <code>0.008</code> a movement. The data left a safe gap: largest hold was <code>0.006793</code>, smallest movement was <code>0.009778</code>.</p></li>
+      <li class="application-step"><p>Run-length decode the movement states.</p>
+        <pre class="code-block"><code>movement 4 frames  = dot
+movement 10 frames = dash
+hold 2 frames      = gap inside a character
+hold 8 frames      = next character
+hold 20 frames     = long boundary</code></pre></li>
+      <li class="application-step"><p>Decode the Morse.</p>
+        <pre class="code-block"><code>.--. ....- .-- ... ..--.- .---- -. ..--.- - .... ...-- ..--.- ... .--. ...-- -.-. - .-. ..- --</code></pre>
+        <p class="writeup-note">It spells <code>P4WS_1N_TH3_SP3CTRUM</code>. Morse carries no case, so the wrapped flag follows the event's lowercase style.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>A deterministic verifier checked metadata, sample count, carrier extraction, allowed run lengths, Morse output and the wrapped flag, then exited 0.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="good-pineapple" aria-labelledby="pineapple-title">
+  <p class="path-label">MISC / 62 MB MKV, 6,572 frames</p>
+  <h2 id="pineapple-title">Good pineapple</h2>
+  <p class="status-line">Recovered from a complete video scan</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{g3t_h1dd3n_b4d_4ppl3d_676767}</code></p>
+  <div class="content-section">
+    <h3>The carrier</h3>
+    <p>The MKV looks like a black and white Bad Apple video. The secret was not in color channels or ordinary bit planes. It was written as short glyphs in a stereoscopic disparity plane, spread across time.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and inventory the container. One grayscale FFV1 video stream, one Opus audio stream, no useful attachment or extra data stream.</p>
+        <pre class="code-block"><code>ffprobe -v error -show_streams -show_format -show_chapters challenge.mkv</code></pre></li>
+      <li class="application-step"><p>Check pixel values and bit planes. Every pixel was exactly 0 or 255, so all eight bit planes were identical. That rules out normal least significant bit hiding immediately.</p></li>
+      <li class="application-step"><p>Treat the video as a cube of x, y and frame number. Scan horizontal and vertical slices through time instead of looking at single frames.</p></li>
+      <li class="application-step"><p>Compare the two horizontal disparity planes, which sat 12 pixels apart. Subtract the matching Bad Apple silhouette so only transient differences survive.</p></li>
+      <li class="application-step"><p>Scan all 6,572 frames. That exposed 39 one-frame glyphs. Keep the vertical pixels around every separator, otherwise a low underscore reads as a centered hyphen.</p></li>
+      <li class="application-step"><p>Join the glyphs in frame order. The first reading used hyphens and was rejected. A full rescan showed four separator strokes whose cropped shape was ambiguous, and both the rejection and the baseline position support underscores.</p></li>
+    </ol>
+  </div>
+  <div class="content-section writeup-flagged">
+    <h3>Honest caveat</h3>
+    <p>The full scan found no extra glyph, and the retained proof includes a glyph contact sheet and a JSON frame map. Scoreboard acceptance of this corrected form was never captured independently, so this is the fully recovered candidate rather than a receipted flag.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="queue" aria-labelledby="queue-title">
+  <p class="path-label">MISC / live TLS menu service</p>
+  <h2 id="queue-title">queue</h2>
+  <p class="status-line">Solved twice against the live service</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{9c974f24-1ec2-4d47-b32e-11fd9b961eda}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The app tried to protect the dangerous function name <code>base_task</code>, but ARQ also registered the same function under the dotted name <code>tasks.base_task</code>. The sanitizer compared only the exact short string, so the dotted alias walked straight past it into a shell command built with <code>os.popen</code>.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and read the source. It showed ARQ 0.26.3, Redis tasks and a setuid <code>/readflag</code> helper.</p>
+        <pre class="code-block"><code>unzip -l queue_0aef23f13a7da4affd2a88364c152261.zip
+unzip queue_0aef23f13a7da4affd2a88364c152261.zip -d queue-src</code></pre></li>
+      <li class="application-step"><p>Find the unsafe command and the sanitizer next to it.</p>
+        <pre class="code-block"><code>rg -n "base_task|os\.popen|allowed" queue-src</code></pre>
+        <p class="writeup-note"><code>base_task</code> built a command shaped like <code>echo {arg} | base64</code>.</p></li>
+      <li class="application-step"><p>Start the worker with the alias <code>tasks.base_task</code>. ARQ resolves the dotted import to the same coroutine but keeps the dotted registered name.</p></li>
+      <li class="application-step"><p>Run that function with this argument.</p>
+        <pre class="code-block"><code>x; /readflag please; #</code></pre>
+        <p class="writeup-note">The semicolon ends the intended <code>echo</code>, <code>/readflag please</code> runs the helper, and <code>#</code> comments out the trailing <code>| base64</code> so the flag prints raw.</p></li>
+      <li class="application-step"><p>Connect to the live TLS menu and repeat it.</p>
+        <pre class="code-block"><code>openssl s_client -quiet -connect HOST:PORT</code></pre>
+        <p class="writeup-note">In the menu: <code>1</code> to register <code>["tasks.base_task"]</code>, <code>2</code> to select it, then send the injection string.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>Same flag returned twice. A local reproduction with the supplied ARQ and Redis versions returned a dummy flag first, which proved the chain before touching the live service.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="one-last-babuin" aria-labelledby="babuin-title">
+  <p class="path-label">PWN / C++ interpreter</p>
+  <h2 id="babuin-title">One Last Babuin</h2>
+  <p class="status-line">Solved against the live service</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{L00ks_l1k3_th3_r0b0t_m4n4g3d_t0_wr1t3_4_symph0ny...But_wh4t_ab0ut_y0u?}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>Vector compaction left an index that could write past the live heap object. That write poisoned tcache, which gave controlled allocations, which built a ROP chain that read the flag file.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and inspect the archive.</p>
+        <pre class="code-block"><code>tar -xzf one_last_babuin_a693b3e91db2b6c0.tar.gz
+checksec --file=babuin</code></pre>
+        <p class="writeup-note"><code>checksec</code> summarizes protections without running anything.</p></li>
+      <li class="application-step"><p>Read the interpreter parser and reproduce the vector compaction sequence locally. Free enough 0x400-class chunks to populate tcache, then trigger the stale index.</p></li>
+      <li class="application-step"><p>Trace the real freed 400-byte tcache chain. A nearest-<code>A</code> heuristic broke on some heap layouts, so the solver followed allocator forward pointers and picked the actual reclaim target.</p></li>
+      <li class="application-step"><p>Use the out-of-bounds write to replace a tcache forward pointer. The next controlled allocations overlap the interpreter object and disclose heap, PIE and stack values.</p></li>
+      <li class="application-step"><p>Calibrate against the remote layout. What worked remotely:</p>
+        <pre class="code-block"><code>PIE base    = qword(0x12d0) - 0x2a83a0
+tcache head = qword(0x12f0) + 0x171a0
+stack slot  = qword(0x1f08) + 0x740</code></pre></li>
+      <li class="application-step"><p>Build a ROP chain that opens and reads the flag file and writes it back to the connection. Regenerate the payload if an address introduces a newline byte, because the interpreter treats newline as end of input.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The remote response contained the exact flag. The TCP handle was closed and the session list was empty afterwards.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="rustyapa" aria-labelledby="rustyapa-title">
+  <p class="path-label">PWN / optimized safe Rust</p>
+  <h2 id="rustyapa-title">RUSTyapa</h2>
+  <p class="status-line">Solved on remote attempt 24</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{n0b0dy_1s_p3rf3ct_4nd_3v3n_th3_c0mp1l3r_c4n_m4k3_m1s74k35}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>Optimized safe Rust kept stale <code>Vec</code> metadata around. The program could use and free the same allocation through conflicting table records. Tcache poisoning then produced forged <code>Record</code> and <code>Table</code> objects, and those became an arbitrary read and write primitive.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and unpack. Full RELRO, NX, PIE, no canary, symbols intact.</p>
+        <pre class="code-block"><code>tar -xzf rustyapa_77887986df09ee05.tar.gz
+checksec --file=rustyapa</code></pre></li>
+      <li class="application-step"><p>Compare the Rust source against optimized assembly and follow pointer, length and capacity across insert, compact and delete. The stale metadata gives a use-after-free followed by a double free.</p></li>
+      <li class="application-step"><p>Poison the right tcache bin and allocate forged objects. Point their fields at chosen addresses so ordinary table operations become reads and writes.</p></li>
+      <li class="application-step"><p>Leak libc and its <code>environ</code> symbol. <code>environ</code> points into the current stack, which locates the saved return address.</p></li>
+      <li class="application-step"><p>Account for the remote launcher: its <code>main</code> frame sat 16 bytes off the direct local layout. The offsets that worked, relative to <code>environ</code>:</p>
+        <pre class="code-block"><code>tables capacity: -0x320
+tables pointer:  -0x318
+tables length:   -0x310
+saved return:    -0x270</code></pre></li>
+      <li class="application-step"><p>Write a libc ROP chain over the saved return address and ask for the flag.</p>
+        <p class="writeup-note">Accumulate received chunks until the expected delimiter shows up. A successful socket read on its own does not prove the delimiter arrived, which cost several attempts.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>Attempt 24 resolved libc, printed the flag, then printed the completion marker. Persisted evidence confirmed the marker and zero open sessions.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="slopgate" aria-labelledby="slopgate-title">
+  <p class="path-label">PWN / custom QEMU PCI device</p>
+  <h2 id="slopgate-title">SlopGate</h2>
+  <p class="status-line">Solved against the live service</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{I_th1nk_w3_b0th_g0t_dumb3r_wh1l3_s0lvin6_this_t4sk}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The device allowed response DMA into its own memory-mapped BAR. A response tag of zero reentered MMIO handling and freed the active 192-byte request while the original handler was still using it. Reclaiming that chunk as a profile context turned it into a host memory primitive.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Build the supplied image with a dummy flag and boot it in isolation. Prove the guest can map the PCI BAR, then submit one request whose response buffer points back into the BAR status register.</p></li>
+      <li class="application-step"><p>Set response tag zero so the nested status write frees the active request. Use <code>PROFILE_COMMAND_REBUILD</code> on a different scratch profile so its 192-byte context reclaims the same chunk.</p></li>
+      <li class="application-step"><p>Finish the original request. Its stale pointer now reaches the profile context, giving a one-byte host XOR primitive and a profile-pointer leak through statistics.</p></li>
+      <li class="application-step"><p>Forge a reader profile to leak <code>QEMUBH</code>, then subtract the known symbol offset for the QEMU PIE base.</p></li>
+      <li class="application-step"><p>Put the read command in a profile context and use <code>PROFILE_COMMAND_SNAPSHOT</code> to replace the bottom-half callback and the opaque pointer atomically. Individual byte writes lost the race because the worker can run between them.</p></li>
+      <li class="application-step"><p>Build the guest exploit, then run the launcher. It solves the Hashcash prompt, uploads the base64-encoded guest binary, runs it, waits for the host trigger and prints the returned flag.</p>
+        <pre class="code-block"><code>gcc -O2 -static -o slopgate-solve slopgate-solve.c
+python3 slopgate-pwn-run.py HOST PORT ./slopgate-solve</code></pre>
+        <p class="writeup-note"><code>-static</code> avoids depending on guest libraries.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The local image returned a dummy test value first, which is not an event flag. The live service then returned the flag above.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="sunhua-gate" aria-labelledby="sunhua-title">
+  <p class="path-label">PWN / C++ firmware service</p>
+  <h2 id="sunhua-title">SunHua Gate</h2>
+  <p class="status-line">Solved with a shell as uid 1000</p>
+  <p class="flag-line"><span>flag</span> <code>kasperky{but_1t_c4tch3s_4ll_th3_3xcept10n5_4nd_n3v3r_f4ll}</code></p>
+  <div class="content-section writeup-flagged">
+    <h3>Spelling</h3>
+    <p>The flag really is <code>kasperky{...}</code> with no <code>s</code> in the middle. Do not correct it.</p>
+  </div>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p><code>cyclic_vector&lt;double&gt;::resize</code> moved its logical border before resizing the backing vector. If the allocation threw <code>std::bad_alloc</code>, the small backing allocation survived while the logical bounds stayed huge. A separate destructor bug leaked large TDDJ vectors, which made controlled exhaustion practical.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and unpack. Full RELRO, canary, NX, PIE.</p>
+        <pre class="code-block"><code>tar -xzf sunhua_da2a7fa7d4bdad6a.tar.gz
+checksec --file=firmware/sunhuagate</code></pre></li>
+      <li class="application-step"><p>Allocate and delete TDDJ devices repeatedly. The derived destructor frees only the base object and leaks the large vector buffer.</p></li>
+      <li class="application-step"><p>Resize a live cyclic vector to 16,384 doubles until allocation fails. Locally that was allocation 195 under a 32 MB limit, remotely it was allocation 826.</p></li>
+      <li class="application-step"><p>After the exception, feed malformed floating point tokens to advance the cyclic index without writing. The state viewer then reads past the real 16-element vector and leaks heap and PIE values.</p></li>
+      <li class="application-step"><p>Use out-of-bounds writes to build a fake <code>Device</code>, a one-node field map and a fake <code>dat</code> field, then redirect a live device pointer at that structure.</p></li>
+      <li class="application-step"><p>Point the fake field at the GOT entry for <code>__isoc23_sscanf</code> and read it for a libc address, then compute <code>system</code> from the known offsets for the supplied remote libc.</p></li>
+      <li class="application-step"><p>Replace the fake aggregation callback with <code>system</code>, put <code>/bin/sh</code> at the start of the fake device, and open the <code>dat</code> settings field.</p>
+        <pre class="code-block"><code>id
+cat /sunhuagate/flag.txt
+exit</code></pre>
+        <p class="writeup-note"><code>id</code> confirms the shell context, <code>cat</code> reads the flag, <code>exit</code> returns cleanly to the application.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The shell reported uid 1000 and returned the exact flag followed by the completion marker. The tube was closed and no sessions were left open.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="biblocker" aria-labelledby="biblocker-title">
+  <p class="path-label">REVERSE / 30 KB x86-64 ELF</p>
+  <h2 id="biblocker-title">biblocker</h2>
+  <p class="status-line">Decrypted payload verified, then confirmed correct</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{s1gn4l5_pr0v1d3d_tPm_k1nd4_sus}</code></p>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Inspect the ELF safely. Partial RELRO, NX, PIE, no stack canary.</p>
+        <pre class="code-block"><code>file biblocker_5d741069dd2afdda
+checksec --file=biblocker_5d741069dd2afdda</code></pre></li>
+      <li class="application-step"><p>Trace the password to key path. The program hashes the password with SHA-256, splits the 32-byte digest in half and XORs the halves into a 16-byte value.</p></li>
+      <li class="application-step"><p>Follow the anti-debug path. A SIGSEGV handler generates a second 16-byte validation secret that normal control flow never exposes. Break before the AES call and read the key buffer.</p>
+        <pre class="code-block"><code>gdb -q ./biblocker_5d741069dd2afdda</code></pre>
+        <p class="writeup-note">The debugger was used only inside an isolated analysis box.</p></li>
+      <li class="application-step"><p>Combine that secret with the stored validation target for the AES-128 key. The IV is the ASCII string <code>blablablablablab</code>.</p></li>
+      <li class="application-step"><p>Decrypt the embedded ciphertext.</p>
+        <pre class="code-block"><code>openssl enc -d -aes-128-cbc -K KEYHEX -iv IVHEX \
+  -in payload.enc -out payload.bin</code></pre>
+        <p class="writeup-note"><code>-K</code> and <code>-iv</code> take raw hex, so no password derivation happens.</p></li>
+      <li class="application-step"><p>Check what came out, then search it.</p>
+        <pre class="code-block"><code>xxd -l 16 payload.bin
+strings -a payload.bin | rg 'kaspersky\{'</code></pre>
+        <p class="writeup-note">The first four bytes were <code>hsqs</code>, the SquashFS magic. The flag sat inside that 4,096-byte image.</p></li>
+    </ol>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="cimple" aria-labelledby="cimple-title">
+  <p class="path-label">REVERSE / Windows x64 single-file .NET host</p>
+  <h2 id="cimple-title">Cimple</h2>
+  <p class="status-line">Accepted by the reconstructed checker</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{1s_c1mpl3_s1mple_3n0ugh_1ab7d0159a87f}</code></p>
+  <div class="content-section">
+    <h3>Layout</h3>
+    <p>A native host with an embedded native DLL and an encrypted managed extension. Together they implement a custom VM and 16 independent three-byte checks.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Inspect the file without running it. Strings gave up <code>CimpleNative.dll</code> and seven suspicious export names.</p>
+        <pre class="code-block"><code>file CimpleManaged_ac9bc4e10212783b.exe
+strings -a -n 6 CimpleManaged_ac9bc4e10212783b.exe | less</code></pre></li>
+      <li class="application-step"><p>Locate the embedded PE headers and pull out the 49,523-byte native DLL. A normal binwalk extraction hit a reparse-point safety rejection, so the byte range was copied directly out of the host file.</p></li>
+      <li class="application-step"><p>Reverse the native exports and the managed bootstrap. The bootstrap decrypts the VM extension, which exposes bytecode, constants and encrypted checker data.</p></li>
+      <li class="application-step"><p>Reimplement the VM with explicit 32-bit wrapping.</p>
+        <pre class="code-block"><code>value = (value + operand) &amp; 0xffffffff</code></pre>
+        <p class="writeup-note">The mask is the whole game. PowerShell integer casts failed here because they do not reproduce modulo 2^32 arithmetic at every operation.</p></li>
+      <li class="application-step"><p>Invert each of the 16 three-byte checker blocks. Each block had exactly one printable solution, so concatenating them gives the flag with no guessing.</p></li>
+      <li class="application-step"><p>Run the candidate back through the reconstructed VM. It printed the original success message and exited 0.</p></li>
+    </ol>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="wasmsafe" aria-labelledby="wasmsafe-title">
+  <p class="path-label">REVERSE / Electron AppImage</p>
+  <h2 id="wasmsafe-title">wasmsafe</h2>
+  <p class="status-line">Accepted by the unchanged challenge checker</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{w4sm_3lectrif1ed_7d19ae15}</code></p>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Find every SquashFS signature instead of trusting the first <code>hsqs</code> hit. The first signature was decoy text, offset 188392 held the real filesystem.</p>
+        <pre class="code-block"><code>grep -aob 'hsqs' awasmsafe_b70b40963c94d668.AppImage
+unsquashfs -s -o 188392 awasmsafe_b70b40963c94d668.AppImage
+unsquashfs -no-progress -o 188392 -d squashfs-root awasmsafe_b70b40963c94d668.AppImage</code></pre>
+        <p class="writeup-note"><code>grep -aob</code> prints byte offsets and <code>unsquashfs -s</code> validates a superblock without extracting.</p></li>
+      <li class="application-step"><p>Extract the Electron resources.</p>
+        <pre class="code-block"><code>npx asar extract squashfs-root/resources/app.asar app
+find app -maxdepth 3 -type f -print</code></pre></li>
+      <li class="application-step"><p>Decompress the embedded WebAssembly and read the exported <code>check_flag</code> routine. It used a 36-byte target, a key derived from the browser fingerprint, a linear PRNG, then RC4.</p>
+        <pre class="code-block"><code>wasm2wat checker.wasm -o checker.wat
+rg -n "check_flag|memory|data" checker.wat app</code></pre></li>
+      <li class="application-step"><p>Reproduce the renderer's real fingerprint. Guessing Node globals failed, because anonymous Chromium functions stringify differently. Run the original renderer under a virtual display with the DevTools protocol exposed.</p>
+        <pre class="code-block"><code>xvfb-run -a squashfs-root/AppRun --no-sandbox --remote-debugging-port=9222</code></pre></li>
+      <li class="application-step"><p>Invert the PRNG and RC4 layers with the measured values, then call the original function in the unchanged renderer.</p>
+        <pre class="code-block"><code>window.checkFlag('kaspersky{w4sm_3lectrif1ed_7d19ae15}')</code></pre>
+        <p class="writeup-note">It returned numeric <code>1</code>, the challenge's success result.</p></li>
+    </ol>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="yet-another-malware" aria-labelledby="yam-title">
+  <p class="path-label">REVERSE / multi-stage Go malware</p>
+  <h2 id="yam-title">Yet another malware</h2>
+  <p class="status-line">Solved with static extraction and a clean protocol client</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{d0_y0u_l1k3_th1s3_p4st4?}</code></p>
+  <div class="content-section">
+    <h3>Safety rule</h3>
+    <p>None of the supplied malware stages were executed. The archive was unpacked in isolation, every layer was decoded statically, and the final server protocol was reimplemented in clean Python.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Unpack the password-protected archive in an isolated box.</p>
+        <pre class="code-block"><code>7z x -pinfected yetanothermalware_e5edc404f6b42ad02320ab02a7bb7f3d.zip -omalware</code></pre></li>
+      <li class="application-step"><p>Reverse the loader, a Go 1.24.5 PE. It accepts <code>password</code> at its prompt, feeds it to scrypt with salt <code>kek</code>, N 32768, r 8, p 1, then uses the result as an AES-256-GCM key.</p></li>
+      <li class="application-step"><p>Reimplement that decryptor. A valid GCM tag yields a Donut shellcode stage. Static Chaskey-CTR unpacking then recovers another Go PE, with no shellcode ever running.</p></li>
+      <li class="application-step"><p>Reverse the inner C2 format: PNG <code>tEXt</code> chunks named <code>X-Comment</code>, Base64, and a custom arithmetic coder seeded from a 7,544-byte story corpus.</p></li>
+      <li class="application-step"><p>Implement only the network codec in a clean client.</p>
+        <pre class="code-block"><code>python3 safe_c2_client.py register
+python3 safe_c2_client.py fetch</code></pre>
+        <p class="writeup-note"><code>register</code> sends a synthetic agent with no host data. <code>fetch</code> downloads the PNG, pulls the comment chunk, decodes Base64 and runs the reconstructed arithmetic decoder.</p></li>
+      <li class="application-step"><p>The first task disclosed a flag path. Fetch that path with the same safe client.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>Two responses used different randomized PNG covers and decoded to the same plaintext.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="canary" aria-labelledby="canary-title">
+  <p class="path-label">WEB / URL sandbox plus cloud metadata</p>
+  <h2 id="canary-title">Canary</h2>
+  <p class="status-line">Solved with two independent object reads</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{5688e9f664a7fa9bce6bbe8414ee6423}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The URL sandbox ran a browser that could be walked across same-origin destinations by DNS rebinding. A three-stage chain loaded attacker-controlled public content, rebound the same hostname to the private Canary service, then rebound it again to the cloud metadata service. The browser origin never changed, only the destination IP.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Inspect the application and its URL fetch behavior. The browser accepted a public URL and ran ordinary page JavaScript.</p></li>
+      <li class="application-step"><p>Serve a page from a hostname with a very short DNS TTL. The DNS service answers with the public attacker page first, the private service second, and the metadata address third.</p></li>
+      <li class="application-step"><p>From the public page, request the same hostname in a loop until the private response appears. Scheme, hostname and port never change, so the browser treats it as same-origin.</p></li>
+      <li class="application-step"><p>Repeat for IMDSv2: request a session token, then the role name and temporary credentials.</p>
+        <pre class="code-block"><code>const token = await fetch('/latest/api/token', {
+  method: 'PUT',
+  headers: {'X-aws-ec2-metadata-token-ttl-seconds': '21600'}
+}).then(r =&gt; r.text());</code></pre></li>
+      <li class="application-step"><p>Use the temporary role only for permitted bucket discovery. Listing the deeper prefixes returned access errors, but listing the parent prefix exposed the object.</p>
+        <pre class="code-block"><code>aws s3api list-objects-v2 --bucket BUCKET --prefix reports/
+aws s3api get-object --bucket BUCKET --key KEY message.eml</code></pre></li>
+      <li class="application-step"><p>Read the 174-byte email and take its single flag.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>Two independent SDKs downloaded identical bytes, matched on digest and ETag.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="frontrooms" aria-labelledby="frontrooms-title">
+  <p class="path-label">WEB / three chained services</p>
+  <h2 id="frontrooms-title">Frontrooms</h2>
+  <p class="status-line">Solved across ports 19080, 19090 and 19100</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{w0w_l00ks_s0_pr0pr13t4ry_1_l0v3_th4t}</code></p>
+  <div class="content-section">
+    <h3>Chain overview</h3>
+    <p>The first port gave login and a Hermes-based camera bridge, and that bridge gave internal GET SSRF into a SQL-injectable directory. The second port exposed a CFB error oracle over an expired employee token. A repaired token bought a JWT that the third port accepted, where employee note 3 held the flag.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Authenticate to port 19080. The client supplied the RC4 challenge instead of the server, so challenge <code>0</code> with response <code>yw==</code> authenticates as admin.</p>
+        <pre class="code-block"><code>curl -i -X POST http://HOST:19080/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"admin","challenge":"0","response":"yw=="}'</code></pre></li>
+      <li class="application-step"><p>In the camera Hermes runtime, repoint the internal route string during the XHR bridge callback. A reentrant timer fires while the pointer is being changed, producing an internal GET to the directory service.</p></li>
+      <li class="application-step"><p>Use the five-column UNION injection in <code>id</code> to enumerate the internal service map, OAuth client metadata and private messages. Message 9 held an expired maintenance employee token.</p></li>
+      <li class="application-step"><p>Send that token to port 19090. The service decrypts 16-byte CFB segments and leaks different base64 or JSON errors. Use those as an oracle to recover the plaintext.</p>
+        <pre class="code-block"><code>{"employee_id": 1, "issuer": "ext", "creation_date": "2022-02-24T00:00:00.123456789"}</code></pre></li>
+      <li class="application-step"><p>Repair the preceding ciphertext blocks so CFB decryption moves the date to now and changes <code>employee_id</code> from 1 to 3. Exchange the repaired token as OAuth client 1 for a JWT with <code>sub: 3</code>.</p></li>
+      <li class="application-step"><p>Use that JWT on port 19100.</p>
+        <pre class="code-block"><code>curl -i http://HOST:19100/notes/3 -H 'Authorization: Bearer JWT_HERE'</code></pre></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>A fresh authenticated request to the same note independently returned the same flag. No broad port scan was run.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="garden" aria-labelledby="garden-title">
+  <p class="path-label">WEB / shogi web app</p>
+  <h2 id="garden-title">Garden</h2>
+  <p class="status-line">Solved with an exact match and a negative control</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{0ld_s4mur4i_w0u1d_b3_pr0u6}</code></p>
+  <div class="content-section">
+    <h3>The bug</h3>
+    <p>The backend inserted a client-supplied shogi move straight into SQL. The cshogi parser only checked the first four characters of a pawn drop, so legal move text could carry a trailing SQL expression.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Verify and read the source.</p>
+        <pre class="code-block"><code>tar -xzf garden-299ddb5aaa0347e1.tar.gz
+rg -n "save_move_to_db|INSERT|cshogi|move" garden-src</code></pre></li>
+      <li class="application-step"><p>Make a pawn available for a legal drop by playing these moves in order. The promoted move captures a pawn, so <code>P*7e</code> becomes a legal drop and the parser accepts its first four characters.</p>
+        <pre class="code-block"><code>7g7f
+7f7e
+7e7d
+7d7c+</code></pre></li>
+      <li class="application-step"><p>Append the SQL carrier.</p>
+        <pre class="code-block"><code>P*7e' + json_extract('{}', (SELECT move FROM game_moves
+  WHERE user_id='admin' ORDER BY id ASC LIMIT 1)) + '0</code></pre>
+        <p class="writeup-note">The quote closes the original string and the subquery selects the first admin move. SQLite treats that value as a JSON path, and because the flag is not a valid path, <code>json_extract</code> raises an error containing it.</p></li>
+      <li class="application-step"><p>Send the move and read the reflected 500 page. Pull the flag out of the SQLite error text.</p></li>
+      <li class="application-step"><p>Run the final solver from a clean session. It pins the public resolver IP while keeping TLS SNI, creates the game state, sends the payload, extracts the error text, then removes its own session rows in a <code>finally</code> block.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The exact flag triggered the reflected marker, and an altered flag returned HTTP 200 instead. That negative control proves the extractor was not matching unrelated page text.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<article class="writeup-record" id="skudik" aria-labelledby="skudik-title">
+  <p class="path-label">WEB / access control application</p>
+  <h2 id="skudik-title">SKUDik</h2>
+  <p class="status-line">Solved, recovered three times and rechecked</p>
+  <p class="flag-line"><span>flag</span> <code>kaspersky{c32fccdd-762a-4321-8337-163c9b67325f}</code></p>
+  <div class="content-section">
+    <h3>The chain</h3>
+    <p>The app accepted an unsigned JWT whose <code>sub</code> field reached a SQL query. Once admin, a camera snapshot could create an attacker-chosen JPEG filename. Reusing that existing filename as <code>videoStorageDir</code> passed the existence check, and a local adapter then dropped it into <code>df -Pk "&lt;path&gt;"</code> through <code>/bin/sh -c</code>.</p>
+  </div>
+  <div class="content-section">
+    <h3>Solve path</h3>
+    <ol class="application-steps">
+      <li class="application-step"><p>Build an unsigned JWT with algorithm <code>none</code> and a SQL expression in <code>sub</code> that selects the first user. The empty third segment means there is no signature to check.</p>
+        <pre class="code-block"><code>base64url({"alg":"none","typ":"JWT"}).base64url({"sub":"SQL_PAYLOAD"}).</code></pre></li>
+      <li class="application-step"><p>Use the admin session to open the hidden camera WebSocket. Send <code>camera_live_init</code>, wait for camera state, then send <code>camera_ack</code> for camera 1.</p></li>
+      <li class="application-step"><p>Test the filename channel with a harmless delay. The response came back about three seconds late, which proves command substitution.</p>
+        <pre class="code-block"><code>$(sleep 3)-1.jpeg</code></pre></li>
+      <li class="application-step"><p>Exfiltrate through the application's own unit API. The payload used <code>printf</code> with octal <code>\042</code> for JSON quotes, piped JSON to <code>curl --json @-</code>, and created a unit whose label carried the command output.</p></li>
+      <li class="application-step"><p>Avoid broad filesystem searches. The first unbounded <code>find</code> hit <code>/sys</code> and wedged the worker. The search that worked excluded <code>/proc</code>, <code>/sys</code> and <code>/dev</code> and used bounded paths.</p></li>
+      <li class="application-step"><p>Read the new unit back through the ordinary API, then repeat the bounded extraction to rule out a truncated result.</p></li>
+      <li class="application-step"><p>Restore <code>videoStorageDir</code> to its original value and delete the temporary units the application allows deleting.</p></li>
+    </ol>
+  </div>
+  <div class="content-section">
+    <h3>Verification</h3>
+    <p>The flag was recovered three times and freshly rechecked once. The application could not delete one leftover unit, because its own query deletes only higher IDs. That limitation was recorded rather than hidden.</p>
+  </div>
+  <p class="writeup-return"><a href="#contents">back to contents</a></p>
+</article>
+
+<section class="archive-section" id="notes" aria-labelledby="notes-title">
+  <p class="path-label">notes</p>
+  <h2 id="notes-title">Reading notes</h2>
+  <div class="content-section">
+    <h3>Flag spelling</h3>
+    <p>SunHua Gate really returned <code>kasperky{...}</code>. The missing letter is part of the flag.</p>
+  </div>
+  <div class="content-section">
+    <h3>Case</h3>
+    <p>Fluffy Transform decoded to uppercase Morse text. Morse does not carry case, so the wrapped flag uses the event's lowercase convention.</p>
+  </div>
+  <div class="content-section">
+    <h3>Retractions</h3>
+    <p>Ping Pong Show had two early answers from the malware analysis that were later retracted. The victory packet supplied the real flag. The SlopGate local test value was a dummy baked into the test image, not an event flag.</p>
+  </div>
+  <div class="content-section">
+    <h3>One unreceipted flag</h3>
+    <p>Good pineapple is the only entry without an independent scoreboard receipt. It is fully reconstructed from a complete frame scan and reported as a corrected candidate.</p>
+  </div>
+  <div class="content-section">
+    <h3>Reconstructed commands</h3>
+    <p>Some solver invocations are reconstructed. Temporary workspaces were cleaned up after the event, so where the exact terminal history was gone, the verified algorithm, offsets and values are preserved instead.</p>
+  </div>
+</section>
+
+      </div>
+    </div>
+  </main>
+  <footer class="ready-site-footer"><div class="ready-site-footer__inner"><p>Kernel Kittens / CTF team</p><p><a href="/accessibility/">accessibility</a> / no trackers / no remote scripts</p></div></footer>
+</div>
+</body>
+</html>
