@@ -1,6 +1,6 @@
 ---
-name: Community Write-up Submission
-about: Submit a CTF challenge write-up for publication on kernelkittens.team
+name: Team Write-up Submission
+about: Submit a CTF challenge write-up from a recent competition for the team archive
 title: "[Writeup]: <Event> - <Challenge Name>"
 labels: writeup-submission
 assignees: SpookyMoo
