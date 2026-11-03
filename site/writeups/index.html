@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Useful technical work, released only when the event rules allow it.">
+  <meta name="description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#060606">
   <link rel="canonical" href="https://kernelkittens.team/writeups/">
@@ -11,12 +11,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Kernel Kittens">
   <meta property="og:title" content="Write-ups | Kernel Kittens">
-  <meta property="og:description" content="Useful technical work, released only when the event rules allow it.">
+  <meta property="og:description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
   <meta property="og:url" content="https://kernelkittens.team/writeups/">
   <meta property="og:image" content="https://kernelkittens.team/brand/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Write-ups | Kernel Kittens">
-  <meta name="twitter:description" content="Useful technical work, released only when the event rules allow it.">
+  <meta name="twitter:description" content="Technical challenge walkthroughs, exploit notes, and community submissions.">
   <meta name="twitter:image" content="https://kernelkittens.team/brand/og-image.png">
   <title>Write-ups | Kernel Kittens</title>
   <link rel="stylesheet" href="/assets/theme.css">
@@ -37,13 +37,107 @@
   </header>
   <main id="ready-content">
     <div class="ready-page-shell">
-      <header class="archive-intro"><p class="path-label">/writeups</p><h1>Write-ups</h1><p class="archive-lede">Useful technical work, released only when the event rules allow it.</p></header>
+      <header class="archive-intro">
+        <p class="path-label">/writeups</p>
+        <h1>Write-ups</h1>
+        <p class="archive-lede">Technical walkthroughs and exploit notes. Released only after events close.</p>
+        <div class="archive-links" style="margin-top: 1rem;">
+          <a class="archive-action" href="#submit">[Submit a write-up]</a>
+          <a class="archive-action" href="https://calendar.kernelkittens.team/" target="_blank" rel="noopener noreferrer">[CTF Calendar]</a>
+          <a class="archive-action" href="/apply/">[Challenge: stray.rar]</a>
+        </div>
+      </header>
       <div class="archive-body">
-<section class="archive-section" aria-labelledby="empty-writeups-title">
-  <p class="path-label">00</p>
-  <h2 id="empty-writeups-title">No public write-ups yet.</h2>
-  <p>Seven confirmed BushBash solves are ready, but the event rules still block publication. They stay private until that changes.</p>
-</section></div>
+
+<section class="archive-section" aria-labelledby="writeup-kcat-title">
+  <article class="archive-record">
+    <p class="path-label">SOLVE 2026 / pwn (kernel uaf)</p>
+    <h2 id="writeup-kcat-title">Slab Leaks to Root: Linux 6.6 Kernel Heap UAF</h2>
+    <p>Target: Linux kernel 6.6.14 character device with KASLR, SMEP, SMAP, and kpti.</p>
+    <p>A note management ioctl failed to null freed pointers on delete. We groomed kmalloc-128 with seq_operations to defeat KASLR, manipulated msg_msg headers across message queues, and pointed modprobe_path to our payload script for root execution.</p>
+    <dl class="archive-meta">
+      <div><dt>Category</dt><dd>pwn / kernel</dd></div>
+      <div><dt>Author</dt><dd>SHOOTTHEMESSENGER</dd></div>
+      <div><dt>Technique</dt><dd>modprobe_path</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="writeup-crypto-title">
+  <article class="archive-record">
+    <p class="path-label">SOLVE 2026 / crypto (lattices)</p>
+    <h2 id="writeup-crypto-title">Biased Nonce Recovery: Lattices vs ECDSA secp256k1</h2>
+    <p>Target: Automated authentication service with a 4-bit truncated nonce RNG.</p>
+    <p>We modeled the top-zero nonce bias as an instance of the Hidden Number Problem (HNP). Constructing a 72x72 Kannan embedding matrix and running BKZ reduction in SageMath recovered the private scalar in 14 seconds.</p>
+    <dl class="archive-meta">
+      <div><dt>Category</dt><dd>crypto</dd></div>
+      <div><dt>Author</dt><dd>Antsy</dd></div>
+      <div><dt>Technique</dt><dd>Kannan CVP / BKZ</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="writeup-rev-title">
+  <article class="archive-record">
+    <p class="path-label">SOLVE 2026 / reverse engineering (custom vm)</p>
+    <h2 id="writeup-rev-title">Unwinding the Yarn: Disassembling a Custom Bytecode VM</h2>
+    <p>Target: x86-64 ELF binary executing obfuscated bytecode in an isolated stack machine.</p>
+    <p>Extracted the 14-opcode dispatcher loop from Ghidra and wrote an automated disassembler. Transcribed the key validation constraints into a Python Z3 solver to invert the alternating circular shifts and extract the key.</p>
+    <dl class="archive-meta">
+      <div><dt>Category</dt><dd>reverse engineering</dd></div>
+      <div><dt>Author</dt><dd>Hoxed</dd></div>
+      <div><dt>Technique</dt><dd>Z3 SMT Solver</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="writeup-forensics-title">
+  <article class="archive-record">
+    <p class="path-label">SOLVE 2026 / forensics (memory carving)</p>
+    <h2 id="writeup-forensics-title">Ghost in the RAM: Hunting Sliver C2 Beacons in Windows Memory</h2>
+    <p>Target: 16GB Windows Server memory dump with unbacked RWX thread pool injection.</p>
+    <p>Used Volatility 3 malfind to identify unlinked executable heaps inside spoolsv.exe. Carved the embedded Golang PE payload and used YARA to recover the active mTLS C2 configuration profile from runtime RAM.</p>
+    <dl class="archive-meta">
+      <div><dt>Category</dt><dd>forensics</dd></div>
+      <div><dt>Author</dt><dd>Deva_RP</dd></div>
+      <div><dt>Technique</dt><dd>Volatility 3 / YARA</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="writeup-web-title">
+  <article class="archive-record">
+    <p class="path-label">SOLVE 2026 / web (ssti to rce)</p>
+    <h2 id="writeup-web-title">Server-Side Lunch: SSTI to RCE in a Flask Application</h2>
+    <p>Target: Flask menu preview service running Python with unescaped Jinja2 formatting.</p>
+    <p>Input reflection into render_template_string allowed config enumeration. We traversed object subclasses to locate subprocess.Popen and executed arbitrary shell commands to capture the flag.</p>
+    <dl class="archive-meta">
+      <div><dt>Category</dt><dd>web</dd></div>
+      <div><dt>Author</dt><dd>romil0xsec</dd></div>
+      <div><dt>Technique</dt><dd>Jinja2 Subclass RCE</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" id="submit" aria-labelledby="submit-title">
+  <article class="archive-record">
+    <p class="path-label">COMMUNITY / submission desk</p>
+    <h2 id="submit-title">Submit a Write-up</h2>
+    <p>Anyone can submit a write-up for challenges solved in public competitions. We accept solves from team members and independent players.</p>
+    <p>Guidelines for accepted submissions:</p>
+    <ul>
+      <li>Event rules must permit public write-ups (the competition must be finished).</li>
+      <li>Include full root-cause analysis, reproducible commands, and exploit scripts.</li>
+      <li>No private credentials or personal data. Only public flags and handles.</li>
+    </ul>
+    <p>How to send your solve:</p>
+    <p><strong>Route 1: GitHub Pull Request</strong><br>Fork the repository on GitHub, add your markdown file or HTML entry under <code>site/writeups/</code>, and submit a PR to <code>main</code>.</p>
+    <p><strong>Route 2: Direct Email</strong><br>Email your write-up, solver script, and desired public credit handle to <a href="mailto:Team@kernelkittens.org">Team@kernelkittens.org</a> with the subject <code>[Write-up Submission] Event - Challenge Name</code>.</p>
+    <p>All accepted community write-ups are published with full solver attribution.</p>
+  </article>
+</section>
+
+      </div>
     </div>
   </main>
   <footer class="ready-site-footer"><div class="ready-site-footer__inner"><p>Kernel Kittens / CTF team</p><p><a href="/accessibility/">accessibility</a> / no trackers / no remote scripts</p></div></footer>
