@@ -19,10 +19,11 @@
   <meta name="twitter:description" content="Kernel Kittens is a CTF team established in 2026.">
   <meta name="twitter:image" content="https://kernelkittens.team/brand/og-image.png">
   <title>Kernel Kittens | CTF Team</title>
-  <link rel="stylesheet" href="/assets/theme.css">
+  <link rel="stylesheet" href="/assets/theme.css?v=20261104-kitten-audio">
   <script defer src="/assets/vendor/gsap.min.js"></script>
   <script defer src="/assets/vendor/ScrollTrigger.min.js"></script>
-  <script defer src="/assets/motion.js"></script>
+  <script defer src="/assets/motion.js?v=20261104-kitten-audio"></script>
+  <script defer src="/assets/audio.js?v=20261104-kitten-audio"></script>
 </head>
 <body>
   <div class="ready-archive-page kernel-home">
@@ -45,6 +46,13 @@
         </nav>
       </div>
     </header>
+      <div class="site-sound" role="region" aria-label="Site music">
+      <audio data-site-audio loop preload="none" src="/brand/audio/kernel-ambient.mp3" aria-hidden="true"></audio>
+      <button class="audio-toggle" type="button" data-audio-toggle aria-pressed="false" hidden>
+        <svg class="audio-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="audio-speaker" d="M4 9h4l5-4v14l-5-4H4z"/><path class="audio-waves" d="M16 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/><path class="audio-slash" d="M4 3l17 18"/></svg>
+        <span data-audio-label>Play music</span>
+      </button>
+    </div>
     <main id="ready-home">
       <div class="ready-page-shell">
         <header class="kernel-intro">
@@ -70,6 +78,36 @@
             <div class="signal-bottomline"><span>curiosity / collaboration / CTF</span><button type="button" data-motion-toggle aria-pressed="false" hidden>Pause motion <span aria-hidden="true">&#8545;</span></button></div>
           </div>
         </header>
+        <div class="kitten-runway" aria-hidden="true"><div class="kitten-runner" data-kitten-runner aria-hidden="true"><svg class="kitten-runner__art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 72" fill="none" aria-hidden="true" focusable="false">
+  <g class="runner-tail">
+    <path d="M37 35C24 34 22 21 13 21C6 21 5 28 10 31" stroke="#ef6a2e" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g class="runner-leg-back-b" fill="#b34b20">
+    <path d="M43 38C46 38 49 41 47 45L38 53L25 55C22 56 22 60 26 60H39L53 48L54 41Z"/>
+  </g>
+  <g class="runner-leg-front-b" fill="#b34b20">
+    <path d="M69 37L77 39L80 49L94 53C98 54 98 58 94 58H83L72 53L66 44Z"/>
+  </g>
+  <g class="runner-body" fill="#ef6a2e">
+    <path d="M34 36C36 27 49 25 59 27L76 30C85 32 85 42 76 46C69 49 61 46 54 46C43 47 32 45 34 36Z"/>
+  </g>
+  <g class="runner-leg-back-a" fill="#ef6a2e">
+    <path d="M42 38C49 37 53 42 49 47L44 52L50 58H56C60 58 60 62 56 62H47L35 52L39 43Z"/>
+  </g>
+  <g class="runner-leg-front-a" fill="#ef6a2e">
+    <path d="M68 36C72 35 76 37 76 42L73 51L82 58H88C92 58 92 62 88 62H79L64 52L64 42Z"/>
+  </g>
+  <g class="runner-head">
+    <path d="M75 22L75 8L87 15L99 10L97 24L104 29C106 31 104 34 101 35L98 39C93 44 82 43 77 37C73 33 72 27 75 22Z" fill="#ef6a2e"/>
+    <path d="M78 14L79 23L84 18Z" fill="#b34b20"/>
+    <path d="M95 15L91 18L95 22Z" fill="#b34b20"/>
+    <path d="M90 26L94 25" stroke="#060606" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M100 29L104 31L100 33Z" fill="#b34b20"/>
+    <path d="M97 33C97 36 95 37 93 36" stroke="#060606" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M91 31L85 29M91 34L84 35" stroke="#060606" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+</svg>
+</div></div>
         <div class="discipline-strip" role="group" aria-label="Challenge disciplines">
           <span class="strip-label">THE CHALLENGE SPACE</span>
           <ul><li>WEB</li><li>PWN</li><li>CRYPTO</li><li>REVERSE</li><li>FORENSICS</li><li>MISC</li></ul>
@@ -173,12 +211,12 @@
           </div>
         </section>
         <section class="archive-section kernel-film-section" aria-labelledby="film-title">
-          <div class="film-copy"><p class="section-index">04 / IN MOTION</p><h2 id="film-title">A little introduction.</h2><p>The team, the challenges, and the results. Sixteen seconds in our corner of CTF.</p><p class="film-caption">00:16 <span aria-hidden="true">/</span> SILENT TEAM FILM</p><a class="quiet-action" href="/brand/motion/kernel-loop.gif" download>Download the kitten GIF <span aria-hidden="true">&#8595;</span></a></div>
-          <div class="film-media"><video class="kernel-film" controls playsinline preload="none" poster="/brand/motion/kernel-film-poster.png" width="1280" height="720" aria-label="Kernel Kittens team introduction, silent film">
-            <source src="/brand/motion/kernel-film.mp4" type="video/mp4">
+          <div class="film-copy"><p class="section-index">04 / IN MOTION</p><h2 id="film-title">A little introduction.</h2><p>The team, the challenges, and the results. Sixteen seconds in our corner of CTF, with an original soundtrack.</p><p class="film-caption">00:16 <span aria-hidden="true">/</span> ORIGINAL SOUNDTRACK</p><a class="quiet-action" href="/brand/motion/kernel-loop.gif" download>Download the kitten GIF <span aria-hidden="true">&#8595;</span></a></div>
+          <div class="film-media"><video class="kernel-film" controls playsinline preload="none" poster="/brand/motion/kernel-film-poster.png" width="1280" height="720" aria-label="Kernel Kittens team introduction with music">
+            <source src="/brand/motion/kernel-film.mp4?v=music-20261104" type="video/mp4">
             <track kind="captions" src="/brand/motion/kernel-film.vtt" srclang="en" label="English text">
-            <p><a href="/brand/motion/kernel-film.mp4">Watch the team film</a>. Kernel Kittens, a CTF team established in 2026. Results include 19 of 3,349 at BlackHat MEA Qualification CTF 2026 and 3 of 361 with 30 of 30 challenges solved at Kaspersky{CTF} 2026 in the North America, South America, Caribbean division.</p>
-          </video><details class="film-transcript"><summary>Film transcript</summary><p>Kernel Kittens. We play CTFs. Established in 2026. BlackHat MEA Qualification CTF 2026: 19 of 3,349 teams, 15 solves. Kaspersky{CTF} 2026: 3 of 361 teams, 30 of 30 challenges solved, North America, South America, Caribbean division. Explore the results. Read the write-ups. kernelkittens.team.</p></details></div>
+            <p><a href="/brand/motion/kernel-film.mp4?v=music-20261104">Watch the team film</a>. Original electronic music accompanies Kernel Kittens, a CTF team established in 2026. Results include 19 of 3,349 at BlackHat MEA Qualification CTF 2026 and 3 of 361 with 30 of 30 challenges solved at Kaspersky{CTF} 2026 in the North America, South America, Caribbean division.</p>
+          </video><details class="film-transcript"><summary>Film transcript</summary><p>Original ambient electronic music plays throughout. No speech. Kernel Kittens. We play CTFs. Established in 2026. BlackHat MEA Qualification CTF 2026: 19 of 3,349 teams, 15 solves. Kaspersky{CTF} 2026: 3 of 361 teams, 30 of 30 challenges solved, North America, South America, Caribbean division. Explore the results. Read the write-ups. kernelkittens.team.</p></details></div>
         </section>
         <section class="archive-section recruitment-section" aria-labelledby="recruitment-title">
           <div><p class="section-index">05 / YOUR NEXT CHALLENGE</p><h2 id="recruitment-title">Recruitment</h2><p class="recruitment-headline">Got a curious streak?</p><p>Start with <code>stray.rar</code>. Find three fragments. Show us how you think.</p><a class="primary-action" href="/apply/">Apply for team <span aria-hidden="true">&#8599;</span></a></div>

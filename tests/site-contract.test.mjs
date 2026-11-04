@@ -48,7 +48,7 @@ test("every public page uses only the current archive theme", () => {
       `${page} must use the current team logo favicon`,
     );
     assert.deepEqual(
-      [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((match) => match[1]),
+      [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((match) => match[1].split("?")[0]),
       ["/assets/theme.css"],
       `${page} must use only the canonical stylesheet`,
     );
@@ -76,12 +76,12 @@ test("the homepage links to Apply and Discord without loading the application cl
   assert.doesNotMatch(home, /data-ready-root|data-api-origin|data-ready-dialog|data-ready-form/);
   const scripts = [...home.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
   assert.deepEqual(
-    scripts.map(([, attributes]) => attributes.match(/\bsrc="([^"]+)"/)?.[1]),
-    ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js"],
-    "the homepage loads only the ordered, self-hosted animation scripts",
+    scripts.map(([, attributes]) => attributes.match(/\bsrc="([^"]+)"/)?.[1]?.split("?")[0]),
+    ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js", "/assets/audio.js"],
+    "the homepage loads only its ordered, self-hosted animation and audio scripts",
   );
   for (const [, attributes, content] of scripts) {
-    assert.match(attributes, /\bdefer(?:\s|$|=)/, "homepage animation scripts must defer execution");
+    assert.match(attributes, /\bdefer(?:\s|$|=)/, "homepage enhancement scripts must defer execution");
     assert.equal(content.trim(), "", "homepage scripts must not contain inline code");
   }
   assert.doesNotMatch(home, /\/assets\/apply\.js/);
@@ -113,6 +113,64 @@ test("homepage motion uses local media and exposes visitor controls", () => {
   for (const asset of ["kernel-loop.mp4", "kernel-poster.png", "kernel-film.mp4"]) {
     assert.ok(existsSync(new URL(`brand/motion/${asset}`, root)), `${asset} must be included in the deployed site`);
   }
+});
+test("every route offers optional self-hosted music with an accessible control", () => {
+  const scriptAllowlist = new Map([
+    ["index.html", ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js", "/assets/audio.js"]],
+    ["apply/index.html", ["/assets/apply.js", "/assets/audio.js"]],
+    ["writeups/index.html", ["/assets/writeups.js", "/assets/audio.js"]],
+  ]);
+  for (const page of pages) {
+    const html = read(page);
+    const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1];
+    assert.ok(csp, `${page} needs a content security policy`);
+    assert.match(csp, /(?:^|;\s*)media-src 'self'(?:;|$)/, `${page} limits music and video to local media`);
+    assert.match(csp, /(?:^|;\s*)script-src 'self'(?:;|$)/, `${page} limits scripts to local files`);
+
+    const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+    const allowed = scriptAllowlist.get(page) ?? ["/assets/audio.js"];
+    assert.deepEqual(
+      scripts.map(([, attributes]) => attributes.match(/\bsrc="([^"]+)"/)?.[1]?.split("?")[0]).sort(),
+      [...allowed].sort(),
+      `${page} loads only its approved enhancements`,
+    );
+    for (const [, attributes, content] of scripts) {
+      assert.equal(content.trim(), "", `${page} must not add inline scripts`);
+      if (attributes.match(/\bsrc="([^"]+)"/)?.[1]?.split("?")[0] === "/assets/audio.js") {
+        assert.match(attributes, /\bdefer(?:\s|$|=)/, `${page} defers the audio enhancement`);
+      }
+    }
+
+    const audioTags = [...html.matchAll(/<audio\b[^>]*>/g)].map(([tag]) => tag);
+    assert.equal(audioTags.length, 1, `${page} contains one ambient music player`);
+    const audio = audioTags[0];
+    assert.match(audio, /\bdata-site-audio(?=\s|=|>)/);
+    assert.match(audio, /\bsrc="\/brand\/audio\/kernel-ambient\.mp3"/);
+    assert.match(audio, /\bpreload="none"/, `${page} does not fetch optional music before it is requested`);
+    assert.match(audio, /\bloop(?:\s|=|>)/);
+    assert.doesNotMatch(audio, /\bautoplay(?:\s|=|>)/, `${page} never declares autoplaying music`);
+
+    const controls = [...html.matchAll(/<button\b[^>]*\bdata-audio-toggle(?=\s|=|>)[^>]*>[\s\S]*?<\/button>/g)].map(([button]) => button);
+    assert.equal(controls.length, 1, `${page} offers one music toggle`);
+    const control = controls[0];
+    const controlTag = control.match(/^<button\b[^>]*>/)?.[0];
+    assert.match(controlTag, /\btype="button"/);
+    assert.match(controlTag, /\baria-pressed="false"/, `${page} starts with music disabled`);
+    assert.match(controlTag, /\bhidden(?:\s|=|>)/, `${page} reveals the control only when enhancement is ready`);
+    assert.match(control, /<span\b[^>]*\bdata-audio-label(?=\s|=|>)[^>]*>Play music<\/span>/, `${page} labels the music action in visible text`);
+    assert.match(control, /<svg\b[^>]*\baria-hidden="true"/, `${page} keeps its decorative icon out of the accessible name`);
+  }
+  assert.ok(existsSync(new URL("assets/audio.js", root)), "the shared audio client is deployed locally");
+  assert.ok(existsSync(new URL("brand/audio/kernel-ambient.mp3", root)), "the ambient soundtrack is deployed locally");
+});
+
+test("the decorative kitten runner stays outside the accessibility tree and respects motion preferences", () => {
+  const home = read("index.html");
+  const runner = home.match(/<[a-z][^>]*\bdata-kitten-runner(?=\s|=|>)[^>]*>/)?.[0];
+  assert.ok(runner, "the homepage contains its decorative kitten runner");
+  assert.match(runner, /\baria-hidden="true"/, "the runner does not interrupt screen reader navigation");
+  assert.match(read("assets/motion.js"), /prefers-reduced-motion:\s*reduce/, "motion enhancement checks the visitor's reduced-motion preference");
+  assert.match(read("assets/theme.css"), /@media\s*\(prefers-reduced-motion:\s*reduce\)/, "a CSS reduced-motion fallback works before scripts initialize");
 });
 test("the homepage removes the redundant path and publishes every verified result", () => {
   const home = read("index.html");
@@ -319,7 +377,7 @@ test("the roster is published on the homepage and the team page", () => {
   const team = read("team/index.html");
   assert.match(team, /<title>Team \| Kernel Kittens<\/title>/);
   assert.match(team, /<h1>Team<\/h1>/);
-  assert.doesNotMatch(team, /<script/);
+  assert.deepEqual([...team.matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/g)].map((match) => match[1].split("?")[0]), ["/assets/audio.js"], "the team page loads only the shared audio enhancement");
 });
 
 test("every route exposes the team link", () => {

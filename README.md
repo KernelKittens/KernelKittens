@@ -2,7 +2,9 @@
 
 Public team site for [kernelkittens.team](https://kernelkittens.team).
 
-The orange archive includes a responsive homepage, self-hosted GSAP entrance and scroll motion, an 8-second kitten loop, a downloadable GIF, and a 16-second silent team film. The film has native playback controls, captions, and a text transcript. Decorative motion respects reduced-motion preferences and can be paused. All routes, results, roster attribution, and the application API remain available in the static HTML.
+The orange archive includes a responsive homepage, self-hosted GSAP entrance and scroll motion, a small running kitten, an 8-second logo loop, a downloadable GIF, and a 16-second team film with an original soundtrack. The film has native playback controls, captions, and a text transcript. Decorative motion respects reduced-motion preferences and can be paused. All routes, results, roster attribution, and the application API remain available in the static HTML.
+
+Optional, quiet background music is available on every route through the small Music control. Browsers may require a visitor interaction before allowing sound. The music fades in, pauses immediately while the introduction plays, and resumes when the film pauses or ends. A mute choice is saved locally and respected across pages; the background track also pauses when the tab is hidden. All music is original and self-hosted.
 
 The complete static site lives in `site/`, and `site/assets/theme.css` is its only stylesheet. Old themes are deliberately absent from active branches and local working copies.
 

@@ -1,1 +1,1 @@
-Kernel Kittens motion assets. Silent 8-second logo loop and 16-second team film. Generated with Remotion; editable source and render commands are in videos/.
+Kernel Kittens motion assets. Silent 8-second hero logo loop; 16-second team film with original Kernel Signal music. Generated with Remotion. Source, synthesizer and render commands are in videos/.
