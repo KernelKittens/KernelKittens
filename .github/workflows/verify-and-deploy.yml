@@ -66,3 +66,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+
+      - name: Send Discord Deployment Notification
+        if: ${{ always() && steps.deployment.outcome == 'success' }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK" ]; then
+            curl -s -H "Content-Type: application/json" -X POST "$DISCORD_WEBHOOK" -d '{
+              "embeds": [{
+                "title": "kernelkittens.team Deployed Successfully",
+                "url": "https://kernelkittens.team",
+                "color": 15690286,
+                "description": "Production static site build and deployment complete.",
+                "fields": [
+                  {"name": "Domain", "value": "[kernelkittens.team](https://kernelkittens.team)", "inline": true},
+                  {"name": "Commit", "value": "[`${{ github.sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})", "inline": true},
+                  {"name": "Triggered By", "value": "${{ github.actor }}", "inline": true}
+                ],
+                "footer": {"text": "KernelKittens CI/CD • GitHub Pages"}
+              }]
+            }'
+          fi
