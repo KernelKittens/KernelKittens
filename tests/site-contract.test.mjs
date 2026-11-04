@@ -12,6 +12,7 @@ const pages = [
   "writeups/index.html",
   "writeups/kaspersky-sas-ctf-2026/index.html",
   "writeups/bushbash-ctf-2026/index.html",
+  "writeups/tfc-ctf-2026/index.html",
   "accessibility/index.html",
   "404.html",
 ];

