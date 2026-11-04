@@ -8,3 +8,6 @@ coverage/
 .env
 .env.*
 !.env.example
+videos/node_modules/
+videos/out/
+.qa/

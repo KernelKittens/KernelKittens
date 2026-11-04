@@ -4,9 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/site-contract.test.mjs"
+    "test": "node --test tests/site-contract.test.mjs",
+    "preview": "node scripts/serve.mjs",
+    "assets:sync": "node scripts/sync-vendor.mjs"
   },
   "engines": {
     "node": ">=24.0.0"
+  },
+  "devDependencies": {
+    "gsap": "3.15.1"
   }
 }
