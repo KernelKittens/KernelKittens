@@ -74,9 +74,46 @@ test("the homepage links to Apply and Discord without loading the application cl
   assert.match(discordSymbol, /viewBox="0 0 64 48"/);
   assert.match(discordSymbol, /fill="white"/);
   assert.doesNotMatch(home, /data-ready-root|data-api-origin|data-ready-dialog|data-ready-form/);
-  assert.doesNotMatch(home, /<script\b/);
+  const scripts = [...home.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+  assert.deepEqual(
+    scripts.map(([, attributes]) => attributes.match(/\bsrc="([^"]+)"/)?.[1]),
+    ["/assets/vendor/gsap.min.js", "/assets/vendor/ScrollTrigger.min.js", "/assets/motion.js"],
+    "the homepage loads only the ordered, self-hosted animation scripts",
+  );
+  for (const [, attributes, content] of scripts) {
+    assert.match(attributes, /\bdefer(?:\s|$|=)/, "homepage animation scripts must defer execution");
+    assert.equal(content.trim(), "", "homepage scripts must not contain inline code");
+  }
+  assert.doesNotMatch(home, /\/assets\/apply\.js/);
 });
 
+test("homepage motion uses local media and exposes visitor controls", () => {
+  const home = read("index.html");
+  const csp = home.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1];
+  assert.ok(csp, "the homepage needs an explicit content security policy");
+  assert.match(csp, /(?:^|;\s*)media-src 'self'(?:;|$)/, "video playback is limited to self-hosted media");
+  assert.match(csp, /(?:^|;\s*)script-src 'self'(?:;|$)/, "animation scripts remain self-hosted");
+
+  const videos = [...home.matchAll(/<video\b[^>]*>[\s\S]*?<\/video>/g)].map(([video]) => video);
+  const loop = videos.find((video) => video.includes('/brand/motion/kernel-loop.mp4'));
+  assert.ok(loop, "the homepage needs the rendered logo loop");
+  assert.match(loop, /\bposter="\/brand\/motion\/kernel-poster\.png"/, "the logo has a static fallback poster");
+
+  const toggle = home.match(/<button\b[^>]*\bdata-motion-toggle(?=\s|=|>)[^>]*>/)?.[0];
+  assert.ok(toggle, "the homepage needs a motion toggle button");
+  assert.match(toggle, /\btype="button"/, "the motion toggle is an ordinary button");
+  assert.match(toggle, /\baria-pressed="(?:true|false)"/, "the motion toggle exposes its state");
+
+  const film = videos.find((video) => video.includes('/brand/motion/kernel-film.mp4'));
+  assert.ok(film, "the homepage needs the rendered team film");
+  const filmTag = film.match(/^<video\b[^>]*>/)?.[0];
+  assert.match(filmTag, /\bcontrols(?:\s|=|>)/, "the team film has native playback controls");
+  assert.doesNotMatch(filmTag, /\bautoplay(?:\s|=|>)/, "the team film plays only at the visitor's request");
+
+  for (const asset of ["kernel-loop.mp4", "kernel-poster.png", "kernel-film.mp4"]) {
+    assert.ok(existsSync(new URL(`brand/motion/${asset}`, root)), `${asset} must be included in the deployed site`);
+  }
+});
 test("the homepage removes the redundant path and publishes every verified result", () => {
   const home = read("index.html");
   assert.doesNotMatch(home, /<p class="path-label">\/home<\/p>/);

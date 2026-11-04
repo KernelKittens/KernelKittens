@@ -1,0 +1,12 @@
+export const tokens = {
+  page: '#060606',
+  orange: '#ef6a2e',
+  ink: '#d8d3c5',
+  muted: '#aaa497',
+  rule: '#5a2d1d',
+  mono: 'Consolas, "Courier New", monospace',
+  display: 'Arial, sans-serif',
+};
+
+// Canonical homepage kitten mark, including its hash and prompt cut-outs.
+export const kittenPath = 'M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 L 35.5 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z';
