@@ -1,6 +1,6 @@
 # Team film
 
-Silent, 16 seconds, 1280 x 720, 60 fps. One idea per scene, with left-aligned text and the persistent kitten device on the right.
+16 seconds, 1280 x 720, 60 fps, with original ambient synth music. One idea per scene, with left-aligned text and the persistent kitten device on the right.
 
 | Time | Image | Copy |
 | --- | --- | --- |
@@ -11,4 +11,6 @@ Silent, 16 seconds, 1280 x 720, 60 fps. One idea per scene, with left-aligned te
 
 Logo loop: 8 seconds, 800 x 800, 60 fps. A static orange kitten silhouette inside a rotating tilted orbit, radial tick marks and a frame-derived scanning sector. The first and last poses agree exactly. Poster and a compact GIF support static and shareable usage.
 
-Every deliverable is generated from the same compositions. Review images are kept under ignored `out/review/v1/`; source and final website assets remain separately editable.
+Every visual is generated from the same compositions. The original silent version is kept under ignored `out/review/v1/`. The musical update and generated masters use `out/review/v2/`; source and final website assets remain separately editable.
+
+Soundtrack: Kernel Signal, an original E-minor pad/bass/arpeggio composition at 120 BPM with a calm half-time pulse. Harmonic changes align with each four-second scene. The film track fades in over 0.5 seconds and out over the last second. The 32-second website loop is a separate export with wrapped tails, stereo delays and matching PCM endpoints. The hero video remains silent.

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Composition, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Composition, Html5Audio, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {LogoDiagram} from './LogoDiagram';
 import {tokens} from './tokens';
 import {cues} from './cues';
@@ -21,6 +21,10 @@ const TeamFilm: React.FC<Props> = () => {
   const exit = interpolate(localTime, [3.6, 3.95], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const brand = scene.kind === 'identity' || scene.kind === 'close';
   return <AbsoluteFill style={{backgroundColor: tokens.page, color: tokens.ink, fontFamily: tokens.display}}>
+    <Html5Audio src={staticFile('music/kernel-intro.mp3')} volume={audioFrame => {
+      const audioTime = audioFrame / fps;
+      return interpolate(audioTime, [0, 0.5, 15, 16], [0, 1, 1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    }} />
     <div style={{position: 'absolute', top: 45, left: 58, right: 58, borderTop: `1px solid ${tokens.rule}`, paddingTop: 18, display: 'flex', justifyContent: 'space-between', fontFamily: tokens.mono, fontSize: 14, letterSpacing: 2, color: tokens.muted}}><span>KERNEL KITTENS</span><span>CTF TEAM / EST. 2026</span></div>
     <div style={{position: 'absolute', width: 500, height: 500, right: 25, top: 110}}><LogoDiagram phase={(t % 8) / 8} /></div>
     <div style={{position: 'absolute', left: 65, top: 188, width: 665, opacity: enter * exit, transform: `translateY(${(1 - enter) * 24}px)`}}>

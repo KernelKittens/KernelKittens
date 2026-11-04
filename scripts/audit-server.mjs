@@ -14,7 +14,7 @@ const types = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml',
   '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg',
-  '.mp4': 'video/mp4', '.gif': 'image/gif', '.ico': 'image/x-icon',
+  '.mp4': 'video/mp4', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.gif': 'image/gif', '.ico': 'image/x-icon',
   '.vtt': 'text/vtt; charset=utf-8',
   '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8',
   '.woff2': 'font/woff2', '.woff': 'font/woff',

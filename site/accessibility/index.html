@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="This site is built for keyboard, screen reader, zoom, reduced-motion, and high-contrast use.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#060606">
   <link rel="canonical" href="https://kernelkittens.team/accessibility/">
   <link rel="icon" href="/brand/kernel-kittens-mark.svg?v=team-logo-20260906" type="image/svg+xml">
@@ -19,7 +19,8 @@
   <meta name="twitter:description" content="This site is built for keyboard, screen reader, zoom, reduced-motion, and high-contrast use.">
   <meta name="twitter:image" content="https://kernelkittens.team/brand/og-image.png">
   <title>Accessibility | Kernel Kittens</title>
-  <link rel="stylesheet" href="/assets/theme.css">
+  <link rel="stylesheet" href="/assets/theme.css?v=20261104-kitten-audio">
+  <script defer src="/assets/audio.js?v=20261104-kitten-audio"></script>
 </head>
 <body>
 <div class="ready-archive-page">
@@ -35,11 +36,18 @@
       </nav>
     </div>
   </header>
-  <main id="ready-content">
+    <div class="site-sound" role="region" aria-label="Site music">
+      <audio data-site-audio loop preload="none" src="/brand/audio/kernel-ambient.mp3" aria-hidden="true"></audio>
+      <button class="audio-toggle" type="button" data-audio-toggle aria-pressed="false" hidden>
+        <svg class="audio-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="audio-speaker" d="M4 9h4l5-4v14l-5-4H4z"/><path class="audio-waves" d="M16 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/><path class="audio-slash" d="M4 3l17 18"/></svg>
+        <span data-audio-label>Play music</span>
+      </button>
+    </div>
+    <main id="ready-content">
     <div class="ready-page-shell">
       <header class="archive-intro"><p class="path-label">/accessibility</p><h1>Accessibility</h1><p class="archive-lede">This site is built for keyboard, screen reader, zoom, reduced-motion, and high-contrast use.</p></header>
       <div class="archive-body">
-<section class="archive-section" aria-labelledby="access-target"><h2 id="access-target">Our target</h2><p>We target WCAG 2.2 Level AA and test the public routes with automated browser and accessibility checks. The site uses semantic HTML, visible focus, system fonts, and no required client-side JavaScript outside the application.</p></section>
+<section class="archive-section" aria-labelledby="access-target"><h2 id="access-target">Our target</h2><p>We target WCAG 2.2 Level AA and test the public routes with automated browser and accessibility checks. The site uses semantic HTML, visible focus, system fonts, and no required client-side JavaScript outside the application. Optional background music has a visible mute control and pauses while the introduction video plays. Decorative motion can be paused and respects reduced-motion preferences.</p></section>
 <section class="archive-section" aria-labelledby="access-report"><h2 id="access-report">Report a problem</h2><p>If something blocks you, email <a href="mailto:accessibility@kitsunetechnologies.org">accessibility@kitsunetechnologies.org</a>. Include the page address and what you were trying to do if you can. We aim to acknowledge accessibility reports within 48 hours.</p></section>
 <section class="archive-section" aria-labelledby="access-gaps"><h2 id="access-gaps">Known gaps</h2><p>We do not currently know of a critical accessibility blocker. Automated checks cannot catch every problem, so direct reports still matter.</p></section></div>
     </div>
