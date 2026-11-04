@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Technical resources, standard toolkits, and offensive research workflows curated by Kernel Kittens.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
+  <meta name="theme-color" content="#060606">
+  <link rel="canonical" href="https://kernelkittens.team/resources/">
+  <link rel="icon" href="/brand/kernel-kittens-mark.svg?v=team-logo-20260906" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kernel Kittens">
+  <meta property="og:title" content="Resources | Kernel Kittens">
+  <meta property="og:description" content="Technical resources, standard toolkits, and offensive research workflows curated by Kernel Kittens.">
+  <meta property="og:url" content="https://kernelkittens.team/resources/">
+  <meta property="og:image" content="https://kernelkittens.team/brand/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Resources | Kernel Kittens">
+  <meta name="twitter:description" content="Technical resources, standard toolkits, and offensive research workflows curated by Kernel Kittens.">
+  <meta name="twitter:image" content="https://kernelkittens.team/brand/og-image.png">
+  <title>Resources | Kernel Kittens</title>
+  <link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<div class="ready-archive-page">
+  <a class="skip-link" href="#ready-content">Skip to content</a>
+  <header class="ready-site-header">
+    <div class="ready-site-header__inner">
+      <a class="crew-identity" href="/" aria-label="Kernel Kittens home">
+        <svg class="crew-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z"/></svg>
+        <span class="crew-signature"><strong>Kernel Kittens</strong><small>est. 2026</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/">[write-ups]</a></li><li><a href="/apply/">[apply]</a></li></ul>
+      </nav>
+    </div>
+  </header>
+  <main id="ready-content">
+    <div class="ready-page-shell">
+      <header class="archive-intro">
+        <p class="path-label">/resources</p>
+        <h1>Team Toolkit</h1>
+        <p class="archive-lede">Curated utilities, decompilers, solvers, and operational guides used during competitive CTF events.</p>
+      </header>
+      <div class="archive-body">
+
+<section class="archive-section" aria-labelledby="pwn-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">DISCIPLINE / binary exploitation</p>
+    <h2 id="pwn-toolkit-title">Binary Exploitation &amp; Pwn</h2>
+    <p>Core toolchain for inspecting ELF binaries, tracing heap allocators, building ROP chains, and executing remote exploits.</p>
+    <dl class="archive-meta">
+      <div><dt>Debugger</dt><dd>GDB + pwndbg / GEF</dd></div>
+      <div><dt>Exploit Framework</dt><dd>pwntools (Python 3)</dd></div>
+      <div><dt>Gadget Analyzers</dt><dd>ROPgadget, one_gadget, seccomp-tools</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="rev-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">DISCIPLINE / reverse engineering</p>
+    <h2 id="rev-toolkit-title">Reverse Engineering</h2>
+    <p>Disassemblers, decompilers, symbolic execution engines, and emulator environments for static and dynamic binary analysis.</p>
+    <dl class="archive-meta">
+      <div><dt>Primary Decompiler</dt><dd>Ghidra / IDA Pro</dd></div>
+      <div><dt>Dynamic Debugger</dt><dd>x64dbg / Cutter</dd></div>
+      <div><dt>Symbolic Solver</dt><dd>angr / Z3 Theorem Prover</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="web-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">DISCIPLINE / web security</p>
+    <h2 id="web-toolkit-title">Web Security &amp; Exploitation</h2>
+    <p>Interception proxies, fuzzing engines, token manipulation tools, and encoding utilities for web application testing.</p>
+    <dl class="archive-meta">
+      <div><dt>HTTP Proxies</dt><dd>Burp Suite / Caido</dd></div>
+      <div><dt>Fuzzing &amp; Discovery</dt><dd>ffuf / feroxbuster</dd></div>
+      <div><dt>Data Transformation</dt><dd>CyberChef (self-hosted)</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="crypto-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">DISCIPLINE / cryptography</p>
+    <h2 id="crypto-toolkit-title">Applied Cryptography</h2>
+    <p>Mathematical computing platforms, factorization tooling, and lattice reduction libraries for breaking classical and modern ciphers.</p>
+    <dl class="archive-meta">
+      <div><dt>Math Platform</dt><dd>SageMath (v10+)</dd></div>
+      <div><dt>Python Libraries</dt><dd>PyCryptodome / gmpy2</dd></div>
+      <div><dt>RSA &amp; Factoring</dt><dd>RsaCtfTool / factordb-py</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="forensics-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">DISCIPLINE / forensics &amp; hardware</p>
+    <h2 id="forensics-toolkit-title">Forensics, Memory &amp; Hardware</h2>
+    <p>Memory analysis frameworks, network packet dissectors, firmware extractors, and logic analyzer suites.</p>
+    <dl class="archive-meta">
+      <div><dt>Memory Analysis</dt><dd>Volatility 3</dd></div>
+      <div><dt>Packet Analysis</dt><dd>Wireshark / tshark</dd></div>
+      <div><dt>Firmware &amp; Stego</dt><dd>binwalk / zsteg / Saleae Logic</dd></div>
+    </dl>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="rules-toolkit-title">
+  <article class="archive-record">
+    <p class="path-label">OPERATIONS / competitive protocol</p>
+    <h2 id="rules-toolkit-title">Team Operational Guidelines</h2>
+    <p>Standard practices for communication, challenge triage, safe testing environments, and post-competition documentation.</p>
+    <dl class="archive-meta">
+      <div><dt>Environment</dt><dd>Isolated VM / Docker containers only</dd></div>
+      <div><dt>Write-up Protocol</dt><dd>Publish only after event concludes</dd></div>
+      <div><dt>Flag Handling</dt><dd>Store receipts with command logs</dd></div>
+    </dl>
+  </article>
+</section>
+
+      </div>
+    </div>
+  </main>
+  <footer class="ready-site-footer"><div class="ready-site-footer__inner"><p>Kernel Kittens / CTF team</p><p><a href="/accessibility/">accessibility</a> / no trackers / no remote scripts</p></div></footer>
+</div>
+</body>
+</html>

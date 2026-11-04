@@ -41,10 +41,20 @@
         <p class="path-label">/writeups</p>
         <h1>Write-ups</h1>
         <p class="archive-lede">Useful technical work, released only when event rules allow it.</p>
+        <nav class="filter-bar" aria-label="Filter write-ups by discipline">
+          <button type="button" class="filter-pill active" data-filter="all" aria-pressed="true">All (30)</button>
+          <button type="button" class="filter-pill" data-filter="web" aria-pressed="false">Web (6)</button>
+          <button type="button" class="filter-pill" data-filter="crypto" aria-pressed="false">Crypto (5)</button>
+          <button type="button" class="filter-pill" data-filter="rev" aria-pressed="false">Reverse (6)</button>
+          <button type="button" class="filter-pill" data-filter="pwn" aria-pressed="false">Pwn (2)</button>
+          <button type="button" class="filter-pill" data-filter="ai" aria-pressed="false">AI / ML (4)</button>
+          <button type="button" class="filter-pill" data-filter="forensics" aria-pressed="false">Forensics (2)</button>
+          <button type="button" class="filter-pill" data-filter="misc" aria-pressed="false">Hardware &amp; Misc (5)</button>
+        </nav>
       </header>
       <div class="archive-body">
 
-<section class="archive-section" aria-labelledby="kaspersky-archive-title">
+<section class="archive-section" aria-labelledby="kaspersky-archive-title" data-categories="ai,crypto,forensics,misc,pwn,rev,web">
   <article class="archive-record">
     <p class="path-label">SOLVES 2026 / team result</p>
     <h2 id="kaspersky-archive-title">Kaspersky SAS CTF 2026</h2>
@@ -57,7 +67,7 @@
   </article>
 </section>
 
-<section class="archive-section" aria-labelledby="bushbash-archive-title">
+<section class="archive-section" aria-labelledby="bushbash-archive-title" data-categories="crypto,misc,rev,web">
   <article class="archive-record">
     <p class="path-label">SOLVES 2026 / member solves with 1337_PwnSp4c3</p>
     <h2 id="bushbash-archive-title">BushBash CTF 2026</h2>
@@ -70,7 +80,7 @@
   </article>
 </section>
 
-<section class="archive-section" aria-labelledby="tfc-archive-title">
+<section class="archive-section" aria-labelledby="tfc-archive-title" data-categories="web">
   <article class="archive-record">
     <p class="path-label">SOLVES 2026 / standalone research solve</p>
     <h2 id="tfc-archive-title">TFC CTF 2026</h2>
@@ -101,5 +111,6 @@
   </main>
   <footer class="ready-site-footer"><div class="ready-site-footer__inner"><p>Kernel Kittens / CTF team</p><p><a href="/accessibility/">accessibility</a> / no trackers / no remote scripts</p></div></footer>
 </div>
+<script src="/assets/writeups.js"></script>
 </body>
 </html>

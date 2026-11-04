@@ -9,6 +9,7 @@ const pages = [
   "team/index.html",
   "apply/index.html",
   "results/index.html",
+  "resources/index.html",
   "writeups/index.html",
   "writeups/kaspersky-sas-ctf-2026/index.html",
   "writeups/bushbash-ctf-2026/index.html",
