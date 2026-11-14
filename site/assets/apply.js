@@ -26,6 +26,10 @@ function parseSession(value) {
     typeof value.artifact.sha256 !== "string" ||
     !/^[a-f0-9]{64}$/u.test(value.artifact.sha256) ||
     !(value.solvedAtMs === null || Number.isSafeInteger(value.solvedAtMs)) ||
+    !(value.score === null ||
+      (Number.isSafeInteger(value.score) && value.score >= 0 && value.score <= 1000)) ||
+    !(value.inviteEligible === null || typeof value.inviteEligible === "boolean") ||
+    !(value.discordInviteUrl === null || typeof value.discordInviteUrl === "string") ||
     typeof value.discordJoinReady !== "boolean" ||
     !(value.discordJoinUrl === null || typeof value.discordJoinUrl === "string") ||
     !["unavailable", "ready", "joining", "joined", "role_pending", "retry"].includes(value.discordJoinState) ||
@@ -46,6 +50,9 @@ function parseSession(value) {
       sha256: value.artifact.sha256,
     },
     solvedAtMs: value.solvedAtMs,
+    score: value.score,
+    inviteEligible: value.inviteEligible,
+    discordInviteUrl: value.discordInviteUrl,
     discordJoinReady: value.discordJoinReady,
     discordJoinUrl: value.discordJoinUrl,
     discordJoinState: value.discordJoinState,
@@ -128,6 +135,35 @@ if (root !== null) {
       url.pathname === "/auth/discord/join/start" ? url.toString() : null;
   }
 
+  function safeInviteUrl(value) {
+    if (value.inviteEligible !== true || typeof value.discordInviteUrl !== "string") return null;
+    try {
+      const url = new URL(value.discordInviteUrl);
+      const allowed = url.protocol === "https:" &&
+        (url.hostname === "discord.gg" || url.hostname === "discord.com" || url.hostname === "www.discord.com");
+      return allowed ? url.toString() : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function renderOutcome(value) {
+    if (value.solvedAtMs === null || value.score === null || value.elapsedMs === null) return;
+    const totalSeconds = Math.floor(value.elapsedMs / 1000);
+    const stamp = `${String(Math.floor(totalSeconds / 60)).padStart(2, "0")}:${String(totalSeconds % 60).padStart(2, "0")}`;
+    result.textContent = `Accepted in ${stamp}. Score ${value.score} of 1000.`;
+    const inviteUrl = safeInviteUrl(value);
+    if (inviteUrl !== null) {
+      const link = document.createElement("a");
+      link.href = inviteUrl;
+      link.rel = "noopener";
+      link.textContent = "Use your public server invite";
+      result.append(" ", link);
+    } else if (value.inviteEligible === true) {
+      result.append(" Your public server invite is on the way.");
+    }
+  }
+
   function showDiscordJoin(value) {
     join.hidden = true;
     const joinUrl = safeJoinUrl(value);
@@ -167,6 +203,7 @@ if (root !== null) {
     downloadUrl.searchParams.set("action", value.downloadAction);
     download.href = downloadUrl.toString();
     sha.textContent = value.artifact.sha256;
+    renderOutcome(value);
     reissuePanel.hidden = value.solvedAtMs !== null || value.firstDownloadAtMs === null;
     if (!reissuePanel.hidden) startReissueCountdown();
     else {

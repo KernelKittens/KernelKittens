@@ -57,16 +57,17 @@
             <h3 id="rules-title">Before you start</h3>
             <ul>
               <li>Only the downloaded archive is in scope.</li>
-              <li>Find three fragments in order, then assemble them with the format below.</li>
+              <li>The archive holds a three-part key. Every part is inside it, and the parts only count in order.</li>
               <li>Do not collaborate with or share challenge material with other people.</li>
-              <li>Scoring is based on the time from your first download to a correct submission.</li>
-              <li>This challenge is designed to be solvable in under five minutes.</li>
-              <li>Every correct solve unlocks the KernelKittens Discord and grants Member.</li>
-              <li>Under 5:00 gets Member plus CTF Player.</li>
-              <li>5:00 or longer gets Member.</li>
+              <li>Scoring runs from your first download to a correct submission. Faster solves score higher.</li>
+              <li>Stock tooling is enough. Nothing needs to be installed beyond what ships with your OS.</li>
+              <li>Your archive opens directly. Only the sealed record inside it is encrypted.</li>
+              <li>Every correct solve learns your score and unlocks the KernelKittens Discord.</li>
+              <li>Under 30:00 also earns an invite to the public server.</li>
+              <li>Under 5:00 earns Member plus CTF Player. 5:00 or longer earns Member.</li>
               <li>Submit the flag from your assigned archive.</li>
             </ul>
-            <p>Submit format: <code>KernelFlag{first_second_third}</code></p>
+            <p>Submit format: <code>KernelFlag{64 lowercase hex characters}</code></p>
           </section>
           <ol class="application-steps">
             <li class="application-step">
@@ -96,11 +97,11 @@
             </li>
             <li class="application-step" data-ready-assignment hidden>
               <h3 id="proof-title">Submit your flag</h3>
-              <p>Submit format: <code>KernelFlag{first_second_third}</code></p>
+              <p>Submit format: <code>KernelFlag{64 lowercase hex characters}</code></p>
               <form class="ready-form" data-ready-form>
                 <div class="field">
                   <label for="ready-flag">Flag</label>
-                  <input id="ready-flag" name="flag" type="text" maxlength="512" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="KernelFlag{first_second_third}" required data-ready-flag>
+                  <input id="ready-flag" name="flag" type="text" maxlength="512" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="KernelFlag{64 lowercase hex}" required data-ready-flag>
                 </div>
                 <button class="primary-action ready-submit" type="submit" data-ready-submit>Submit</button>
               </form>
