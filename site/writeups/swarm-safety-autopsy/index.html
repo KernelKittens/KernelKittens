@@ -21,18 +21,18 @@
         <span class="crew-signature"><strong>Kernel Kittens</strong><small>est. 2026</small></span>
       </a>
       <nav aria-label="Primary">
-        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/" aria-current="page">[write-ups]</a></li><li><a href="/blog/">[blog]</a></li><li><a href="/apply/">[apply]</a></li></ul>
+        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/">[write-ups]</a></li><li><a href="/blog/" aria-current="page">[blog]</a></li><li><a href="/apply/">[apply]</a></li></ul>
       </nav>
     </div>
   </header>
   <main id="ready-content">
     <div class="ready-page-shell">
       <header class="archive-intro">
-        <p class="path-label">/writeups / swarm-safety-autopsy</p>
+        <p class="path-label">/blog / swarm-safety-autopsy</p>
         <h1>Why Agent Swarms Fail in Production</h1>
         <p class="archive-lede">An empirical autopsy of 183 continuous multi-model sessions (12,925 steps, 16,641 tool calls) across Claude, Codex, DSH, and Gemini, and the 4 enforced invariant safeguards required to operate autonomous agent swarms reliably.</p>
         <p class="status-line">AI Safety &amp; Production Systems / Research Whitepaper / November 16, 2026 / By Dominick (Moo)</p>
-        <p><a href="/writeups/">back to write-ups</a> | <a href="/blog/swarm-safety-autopsy/">view in blog</a></p>
+        <p><a href="/blog/">back to blog</a></p>
       </header>
       <div class="archive-body">
 
@@ -70,33 +70,35 @@
   <h2 id="deadly-failures">2. Four Fatal Production Failure Modes</h2>
   <p>Analyzing telemetry transcripts revealed four recurring root-cause patterns that destroy operational reliability:</p>
 
-  <article class="archive-record">
-    <p class="record-label">FAILURE MODE A</p>
-    <h3>The Polling Death Spiral</h3>
-    <p>The single largest source of wasted compute in agent orchestration is synchronous polling. Out of 217 duplicate tool calls analyzed, <strong>140 calls (64.5%)</strong> were repeated status checks such as <code>list_agents</code>, <code>wait_agent</code>, and <code>job_output</code>.</p>
-    <p>One unconstrained session called <code>list_agents</code> 15 times sequentially while waiting for a worker to finish. Because large LLMs evaluate their entire prompt history on each turn, polling with a 200,000 token context burns dollars in minutes.</p>
-  </article>
+  <div class="competition-records">
+    <article class="archive-record">
+      <p class="record-label">FAILURE MODE A</p>
+      <h3>The Polling Death Spiral</h3>
+      <p>The single largest source of wasted compute in agent orchestration is synchronous polling. Out of 217 duplicate tool calls analyzed, <strong>140 calls (64.5%)</strong> were repeated status checks such as <code>list_agents</code>, <code>wait_agent</code>, and <code>job_output</code>.</p>
+      <p>One unconstrained session called <code>list_agents</code> 15 times sequentially while waiting for a worker to finish. Because large LLMs evaluate their entire prompt history on each turn, polling with a 200,000 token context burns dollars in minutes.</p>
+    </article>
 
-  <article class="archive-record" style="margin-top: 1rem;">
-    <p class="record-label">FAILURE MODE B</p>
-    <h3>The Context Bloat Tax &amp; Memory Degradation</h3>
-    <p>Token cost distribution followed an extreme Pareto curve. The median productive task completed in just 20 steps. In contrast, just 3 runaway sessions (217, 164, and 156 steps) consumed <strong>88% of our entire daily token spend</strong>.</p>
-    <p>Beyond step 120, model attention degrades significantly. Agents forget intermediate conclusions, hallucinate already-tested results, and re-fetch files repeatedly. One configuration file was fetched 62 times in a single session.</p>
-  </article>
+    <article class="archive-record">
+      <p class="record-label">FAILURE MODE B</p>
+      <h3>The Context Bloat Tax &amp; Memory Degradation</h3>
+      <p>Token cost distribution followed an extreme Pareto curve. The median productive task completed in just 20 steps. In contrast, just 3 runaway sessions (217, 164, and 156 steps) consumed <strong>88% of our entire daily token spend</strong>.</p>
+      <p>Beyond step 120, model attention degrades significantly. Agents forget intermediate conclusions, hallucinate already-tested results, and re-fetch files repeatedly. One configuration file was fetched 62 times in a single session.</p>
+    </article>
 
-  <article class="archive-record" style="margin-top: 1rem;">
-    <p class="record-label">FAILURE MODE C</p>
-    <h3>The Windows Desktop Console Flash Hazard</h3>
-    <p>When running agents locally on developer workstations, process execution models become an operational hazard. In Windows, launching a console-subsystem binary (such as <code>pwsh</code>, <code>python</code>, or <code>node</code>) allocates a console image before hiding, even with <code>-WindowStyle Hidden</code>.</p>
-    <p>This 200ms console flash immediately steals active keyboard and mouse focus from the user. When running concurrent agents, background tasks constantly interrupt active coding, gaming, or presentations.</p>
-  </article>
+    <article class="archive-record">
+      <p class="record-label">FAILURE MODE C</p>
+      <h3>The Windows Desktop Console Flash Hazard</h3>
+      <p>When running agents locally on developer workstations, process execution models become an operational hazard. In Windows, launching a console-subsystem binary (such as <code>pwsh</code>, <code>python</code>, or <code>node</code>) allocates a console image before hiding, even with <code>-WindowStyle Hidden</code>.</p>
+      <p>This 200ms console flash immediately steals active keyboard and mouse focus from the user. When running concurrent agents, background tasks constantly interrupt active coding, gaming, or presentations.</p>
+    </article>
 
-  <article class="archive-record" style="margin-top: 1rem;">
-    <p class="record-label">FAILURE MODE D</p>
-    <h3>Unbounded Recursive Delegation &amp; Cyclic Ping-Pong</h3>
-    <p>When agents are granted tools to spawn subagents, two failure modes inevitably appear: unbounded depth and cyclic bouncing. An agent delegates to a helper, who delegates to a researcher, who delegates to an auditor. By level 4, semantic drift distorts the original task.</p>
-    <p>Alternatively, Agent A asks Agent B for review, Agent B asks Agent A for clarification, and neither model possesses an intrinsic stopping condition, generating an infinite billing loop.</p>
-  </article>
+    <article class="archive-record">
+      <p class="record-label">FAILURE MODE D</p>
+      <h3>Unbounded Recursive Delegation &amp; Cyclic Ping-Pong</h3>
+      <p>When agents are granted tools to spawn subagents, two failure modes inevitably appear: unbounded depth and cyclic bouncing. An agent delegates to a helper, who delegates to a researcher, who delegates to an auditor. By level 4, semantic drift distorts the original task.</p>
+      <p>Alternatively, Agent A asks Agent B for review, Agent B asks Agent A for clarification, and neither model possesses an intrinsic stopping condition, generating an infinite billing loop.</p>
+    </article>
+  </div>
 </section>
 
 <section class="archive-section" aria-labelledby="invariants-safeguards">
@@ -143,34 +145,39 @@
   </div>
 
   <p>Automated test suite output executed during nightly verification:</p>
-  <pre><code>=== DSH SWARM RECURSION SAFEGUARDS VERIFICATION ===
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="record-label">NIGHTLY VERIFICATION LOG</p>
+    <pre><code>=== DSH SWARM RECURSION SAFEGUARDS VERIFICATION ===
 PASS  Recursion safeguards present in DSH-SYSTEM-PROMPT.md
 PASS  Recursion safeguards installed in ~/.dsh/AGENTS.md
-PASS  Prompt delivers inside 65536 budget (63,406 bytes)
+PASS  Prompt delivers inside 65536 byte budget (63,406 bytes)
 PASS  Depth ceiling tripwire triggers at depth &gt;= 2
 PASS  Turn (5) and token cost ($0.10) circuit breakers trip
 PASS  AgentBus anti-loop hop counter and cycle detector trip
 PASS  [FLEET_PAUSE] switch freezes execution into checkpoint
 ---------------------------------------------------
 VERDICT: PASS (7/7 checks passed)</code></pre>
+  </article>
 </section>
 
 <section class="archive-section" aria-labelledby="council-windtunnel">
   <h2 id="council-windtunnel">5. Inari Council &amp; Fulcrum Decision Wind Tunnel</h2>
   <p>Beyond individual agent guardrails, multi-agent decisions require governance and sensitivity analysis. We deployed two specialized subsystems:</p>
 
-  <article class="archive-record">
-    <p class="record-label">GOVERNANCE ENGINE</p>
-    <h3>Inari Council &amp; O5 Kill Switches</h3>
-    <p>Inari provides a multi-model constitutional council across 3 independent vendor lineages (Azure DeepSeek/GPT-5.4, Moonshot Kimi-k3-1, and xAI Grok-4-1) with an Anthropic Opus chair. Invariants physically prevent identifying data egress and enforce hard kill switches across all 29 departments.</p>
-  </article>
+  <div class="competition-records">
+    <article class="archive-record">
+      <p class="record-label">GOVERNANCE ENGINE</p>
+      <h3>Inari Council &amp; O5 Kill Switches</h3>
+      <p>Inari provides a multi-model constitutional council across 3 independent vendor lineages (Azure DeepSeek/GPT-5.4, Moonshot Kimi-k3-1, and xAI Grok-4-1) with an Anthropic Opus chair. Invariants physically prevent identifying data egress and enforce hard kill switches across all 29 departments.</p>
+    </article>
 
-  <article class="archive-record" style="margin-top: 1rem;">
-    <p class="record-label">DECISION STABILITY</p>
-    <h3>Fulcrum Decision Wind Tunnel &amp; r_flip</h3>
-    <p>Fulcrum decouples evidence gathering from decision scoring using deterministic AHP/MCDA algorithms with zero LLM inference at scoring time. The Decision Wind Tunnel injects controlled provenance perturbations (source authority inversion, freshness decay, and lineage collapsing).</p>
-    <p>We formalized the <strong>Minimum-Flip Stability Margin</strong> (<code>r_flip</code>), measuring the minimal evidentiary perturbation required to invert a top ranking. In our 5-case retrospective benchmark, <code>r_flip</code> achieved 100% predictive accuracy of eventual rank reversal (mean <code>r_flip = 0.89</code> for stable decisions versus <code>0.15</code> for reversed decisions).</p>
-  </article>
+    <article class="archive-record">
+      <p class="record-label">DECISION STABILITY</p>
+      <h3>Fulcrum Decision Wind Tunnel &amp; r_flip</h3>
+      <p>Fulcrum decouples evidence gathering from decision scoring using deterministic AHP/MCDA algorithms with zero LLM inference at scoring time. The Decision Wind Tunnel injects controlled provenance perturbations (source authority inversion, freshness decay, and lineage collapsing).</p>
+      <p>We formalized the <strong>Minimum-Flip Stability Margin</strong> (<code>r_flip</code>), measuring the minimal evidentiary perturbation required to invert a top ranking. In our 5-case retrospective benchmark, <code>r_flip</code> achieved 100% predictive accuracy of eventual rank reversal (mean <code>r_flip = 0.89</code> for stable decisions versus <code>0.15</code> for reversed decisions).</p>
+    </article>
+  </div>
 </section>
 
 <section class="archive-section" aria-labelledby="production-checklist">
