@@ -159,9 +159,9 @@ test("the application is a full archive record with the existing API flow", () =
   assert.match(apply, /<h2>stray\.rar<\/h2>/);
   assert.doesNotMatch(apply, /candidate assignment/);
   assert.doesNotMatch(apply, /READY-V[0-9]/);
-  assert.match(apply, /The archive holds a three-part key\. Every part is inside it, and the parts only count in order\./);
+  assert.match(apply, /Find three fragments in order, then assemble them with the format below\./);
   assert.match(apply, /Stock tooling is enough\. Nothing needs to be installed beyond what ships with your OS\./);
-  assert.match(apply, /Every correct solve learns your score and unlocks the KernelKittens Discord\./);
+  assert.match(apply, /Every correct solve unlocks the KernelKittens Discord and grants Member\./);
   assert.doesNotMatch(apply, /Parts A \+ B \+ C \+ D|10-15 minutes|repeat this challenge/i);
   assert.match(apply, /data-ready-root/);
   assert.match(apply, /data-api-origin="https:\/\/apply\.kernelkittens\.team"/);
@@ -177,25 +177,24 @@ test("the application is a full archive record with the existing API flow", () =
   assert.match(apply, /KernelFlag\{64 lowercase hex characters\}/);
   assert.match(apply, /Submit format: <code>KernelFlag\{64 lowercase hex characters\}<\/code>/);
   assert.doesNotMatch(apply, /KernelFlag\{first_second_third\}/);
-  assert.match(apply, /Under 30:00 also earns an invite to the public server\./);
-  assert.match(apply, /Under 5:00 earns Member plus CTF Player\. 5:00 or longer earns Member\./);
+  assert.match(apply, /No time limit: take as long as you need, just solve it\./);
+  assert.match(apply, /Grandma found this on an old drive and forgot her password\./);
   assert.match(apply, /data-ready-discord-join/);
-  assert.doesNotMatch(apply, /TOP|topTokens|base64|password|256-password/i);
+  assert.doesNotMatch(apply, /TOP|topTokens|base64|256-password/i);
   assert.match(apply, /<script type="module" src="\/assets\/apply\.js"><\/script>/);
   assert.doesNotMatch(apply, /<dialog|data-ready-dialog|data-ready-open|data-ready-close|data-ready-reopen/);
   assert.equal(apply.includes("/apply/stray.rar"), false);
 });
 
-test("the application explains timed scoring and keeps reissue hidden until download", () => {
+test("the application explains the challenge rules and keeps reissue hidden until download", () => {
   const apply = read("apply/index.html");
-  assert.match(apply, /Scoring runs from your first download to a correct submission\. Faster solves score higher\./);
+  assert.match(apply, /No time limit: take as long as you need, just solve it\./);
   assert.doesNotMatch(apply, /You can repeat this challenge as many times as you want\./);
   assert.match(apply, /data-ready-reissue-panel hidden/);
   assert.match(apply, /data-ready-reissue-status[^>]*role="status"[^>]*aria-live="polite"/);
   assert.match(apply, /data-ready-reissue/);
   assert.match(apply, />Request a new archive<\/button>/);
   assert.match(apply, /A new archive is available after one hour\./);
-  assert.match(apply, /Your original timer does not reset\./);
 });
 
 test("the application client has no modal controls", () => {
