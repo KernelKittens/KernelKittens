@@ -161,7 +161,7 @@ test("the application is a full archive record with the existing API flow", () =
   assert.doesNotMatch(apply, /READY-V[0-9]/);
   assert.match(apply, /Find three fragments in order, then assemble them with the format below\./);
   assert.match(apply, /Stock tooling is enough\. Nothing needs to be installed beyond what ships with your OS\./);
-  assert.match(apply, /Every correct solve unlocks the KernelKittens Discord and grants Member\./);
+  assert.match(apply, /A correct solve lets you join the public server\./);
   assert.doesNotMatch(apply, /Parts A \+ B \+ C \+ D|10-15 minutes|repeat this challenge/i);
   assert.match(apply, /data-ready-root/);
   assert.match(apply, /data-api-origin="https:\/\/apply\.kernelkittens\.team"/);
