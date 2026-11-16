@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" width="100%" height="auto">
+  <rect width="800" height="360" fill="#0b0a09" stroke="#5a2d1d" stroke-width="2"/>
+  <text x="30" y="40" fill="#ef6a2e" font-family="Arial Black, sans-serif" font-size="18" font-weight="900">TELEMETRY AUDIT: THE PARETO COST SKEW (183 SESSIONS)</text>
+  <text x="30" y="65" fill="#aaa497" font-family="Consolas, monospace" font-size="12">12,925 Steps | 16,641 Tool Calls | Measured fleet cost concentration</text>
+
+  <!-- Left Card: Median Run -->
+  <rect x="30" y="90" width="350" height="230" fill="#060606" stroke="#5a2d1d" stroke-width="1"/>
+  <rect x="30" y="90" width="350" height="28" fill="#141210"/>
+  <text x="45" y="109" fill="#91b875" font-family="Consolas, monospace" font-size="12" font-weight="bold">NORMAL PRODUCTIVE SESSIONS</text>
+  <text x="45" y="150" fill="#d8d3c5" font-family="Verdana, sans-serif" font-size="13">Median Steps to Completion:</text>
+  <text x="45" y="185" fill="#91b875" font-family="Arial Black, sans-serif" font-size="28">20 STEPS</text>
+  <text x="45" y="220" fill="#aaa497" font-family="Consolas, monospace" font-size="11">- 180 sessions (98.4% of total fleet runs)</text>
+  <text x="45" y="240" fill="#aaa497" font-family="Consolas, monospace" font-size="11">- Accounted for only 12% of total token spend</text>
+  <text x="45" y="260" fill="#aaa497" font-family="Consolas, monospace" font-size="11">- High reasoning velocity, tight focus</text>
+  <rect x="45" y="280" width="310" height="16" fill="#141210" stroke="#5a2d1d"/>
+  <rect x="45" y="280" width="37" height="16" fill="#91b875"/>
+  <text x="90" y="293" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">12% Spend</text>
+
+  <!-- Right Card: 3 Runaways -->
+  <rect x="410" y="90" width="360" height="230" fill="#060606" stroke="#ff8b6c" stroke-width="1"/>
+  <rect x="410" y="90" width="360" height="28" fill="#20100d"/>
+  <text x="425" y="109" fill="#ff8b6c" font-family="Consolas, monospace" font-size="12" font-weight="bold">THE 3 RUNAWAYS (POLLING / BLOAT)</text>
+  <text x="425" y="150" fill="#d8d3c5" font-family="Verdana, sans-serif" font-size="13">Runaway Session Lengths:</text>
+  <text x="425" y="185" fill="#ff8b6c" font-family="Arial Black, sans-serif" font-size="28">217, 164, 156</text>
+  <text x="425" y="220" fill="#aaa497" font-family="Consolas, monospace" font-size="11">- Just 3 sessions (1.6% of runs)</text>
+  <text x="425" y="240" fill="#ff8b6c" font-family="Consolas, monospace" font-size="11">- Consumed 88% of total 24h token spend</text>
+  <text x="425" y="260" fill="#aaa497" font-family="Consolas, monospace" font-size="11">- 64.5% of duplicates were list_agents loops</text>
+  <rect x="425" y="280" width="320" height="16" fill="#141210" stroke="#5a2d1d"/>
+  <rect x="425" y="280" width="281" height="16" fill="#ef6a2e"/>
+  <text x="715" y="293" fill="#080604" font-family="Consolas, monospace" font-size="11" font-weight="bold">88%</text>
+</svg>

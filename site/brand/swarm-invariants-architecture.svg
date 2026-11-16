@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" height="auto">
+  <rect width="800" height="420" fill="#0b0a09" stroke="#5a2d1d" stroke-width="2"/>
+  <text x="30" y="40" fill="#ef6a2e" font-family="Arial Black, sans-serif" font-size="18" font-weight="900">SWARM INVARIANT ARCHITECTURE: 4 ENFORCED BOUNDARIES</text>
+  <text x="30" y="65" fill="#aaa497" font-family="Consolas, monospace" font-size="12">Deterministic guardrails governing multi-model autonomous coordination</text>
+
+  <!-- Level 0: Root Coordinator -->
+  <rect x="250" y="90" width="300" height="60" fill="#141210" stroke="#ef6a2e" stroke-width="2"/>
+  <text x="270" y="115" fill="#ef6a2e" font-family="Arial Black, sans-serif" font-size="13">ROOT COORDINATOR</text>
+  <text x="270" y="135" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">Depth 0 | Interactive User Session</text>
+
+  <!-- Arrow down -->
+  <line x1="400" y1="150" x2="400" y2="180" stroke="#ef6a2e" stroke-width="2" stroke-dasharray="4"/>
+  <polygon points="396,180 404,180 400,186" fill="#ef6a2e"/>
+
+  <!-- Level 1: Subagent -->
+  <rect x="100" y="190" width="280" height="70" fill="#141210" stroke="#91b875" stroke-width="1"/>
+  <text x="120" y="215" fill="#91b875" font-family="Arial Black, sans-serif" font-size="12">SPECIALIZED SUBAGENT</text>
+  <text x="120" y="235" fill="#aaa497" font-family="Consolas, monospace" font-size="11">Depth 1 | Delegated Task Scope</text>
+  <text x="120" y="250" fill="#f2bf5b" font-family="Consolas, monospace" font-size="10">Circuit Breaker: 5 turns / $0.10 cap</text>
+
+  <!-- Level 2: Worker Leaf -->
+  <line x1="240" y1="260" x2="240" y2="290" stroke="#91b875" stroke-width="1" stroke-dasharray="2"/>
+  <polygon points="237,290 243,290 240,296" fill="#91b875"/>
+
+  <rect x="100" y="300" width="280" height="70" fill="#060606" stroke="#91b875" stroke-width="1"/>
+  <text x="120" y="325" fill="#91b875" font-family="Arial Black, sans-serif" font-size="12">LEAF WORKER</text>
+  <text x="120" y="345" fill="#aaa497" font-family="Consolas, monospace" font-size="11">Depth 2 | Spawning Tools Stripped</text>
+  <text x="120" y="360" fill="#91b875" font-family="Consolas, monospace" font-size="10">Read/Write scope strictly isolated</text>
+
+  <!-- Depth ceiling tripwire line -->
+  <line x1="50" y1="390" x2="750" y2="390" stroke="#ff8b6c" stroke-width="2" stroke-dasharray="6"/>
+  <text x="50" y="410" fill="#ff8b6c" font-family="Consolas, monospace" font-size="11" font-weight="bold">[PHYSICAL DEPTH CEILING = 2] - Recursion beyond depth 2 strictly refused</text>
+
+  <!-- Right side: Invariant Mechanisms -->
+  <!-- Hop tracking -->
+  <rect x="440" y="190" width="310" height="85" fill="#141210" stroke="#f2bf5b" stroke-width="1"/>
+  <text x="460" y="215" fill="#f2bf5b" font-family="Arial Black, sans-serif" font-size="12">AGENTBUS HOP TRACKING</text>
+  <text x="460" y="235" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">- Decrementing hop_limit on message bus</text>
+  <text x="460" y="252" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">- Cycle detector drops repeat recipients</text>
+  <text x="460" y="268" fill="#aaa497" font-family="Consolas, monospace" font-size="10">Replaces polling with reactive wakeup</text>
+
+  <!-- Fleet Pause -->
+  <rect x="440" y="290" width="310" height="80" fill="#20100d" stroke="#ff8b6c" stroke-width="1"/>
+  <text x="460" y="315" fill="#ff8b6c" font-family="Arial Black, sans-serif" font-size="12">[FLEET_PAUSE] KILL SWITCH</text>
+  <text x="460" y="335" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">- Universal broadcast signal</text>
+  <text x="460" y="352" fill="#d8d3c5" font-family="Consolas, monospace" font-size="11">- Freezes active tasks into disk JSON state</text>
+</svg>

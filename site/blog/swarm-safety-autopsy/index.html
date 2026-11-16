@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Why agent swarms fail in production: telemetry audit of 183 multi-model sessions and 4 production invariant safeguards.">
+  <meta name="description" content="Why agent swarms fail in production: telemetry audit of 183 multi-model sessions, stop baby-talking frontier models, and 4 production invariant safeguards.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#060606">
   <link rel="canonical" href="https://kernelkittens.team/blog/swarm-safety-autopsy/">
@@ -42,9 +42,11 @@
     <li><a href="#telemetry-audit">1. Empirical Telemetry Audit (183 Real Sessions)</a></li>
     <li><a href="#deadly-failures">2. Four Fatal Production Failure Modes</a></li>
     <li><a href="#invariants-safeguards">3. Engineered Invariant Safeguards</a></li>
-    <li><a href="#tripwire-verification">4. Automated Recursion Tripwire CI Verification</a></li>
-    <li><a href="#council-windtunnel">5. Inari Council &amp; Fulcrum Decision Wind Tunnel</a></li>
-    <li><a href="#production-checklist">6. Production Swarm Engineering Checklist</a></li>
+    <li><a href="#stop-baby-talk">4. The Smart Way: Stop Baby-Talking Frontier Models</a></li>
+    <li><a href="#shared-doctrine">5. Constitutional Alignment &amp; Shared Incentives</a></li>
+    <li><a href="#tripwire-verification">6. Automated Recursion Tripwire CI Verification</a></li>
+    <li><a href="#council-windtunnel">7. Inari Council &amp; Fulcrum Decision Wind Tunnel</a></li>
+    <li><a href="#production-checklist">8. Production Swarm Engineering Checklist</a></li>
   </ul>
 </section>
 
@@ -62,6 +64,8 @@
     <p><span>Turn Failures:</span><span>23% ended in error, timeout, or context truncation</span></p>
     <p><span>File Re-reads:</span><span>395 duplicate file fetches within identical sessions</span></p>
   </div>
+
+  <p style="margin-top: 1.5rem;"><img src="/brand/swarm-failure-pareto.svg" alt="Telemetry Audit Pareto Distribution Chart" width="800" height="360"></p>
 
   <p>Unconstrained agent swarms do not spontaneously achieve high reasoning autonomy. Without rigid determinism and architectural tripwires, they achieve combinatorial waste, runaway token burns, and silent deadlocks.</p>
 </section>
@@ -105,6 +109,8 @@
   <h2 id="invariants-safeguards">3. Engineered Invariant Safeguards</h2>
   <p>To eliminate these failure modes permanently, we engineered four hard architectural invariants directly into our operating harnesses:</p>
 
+  <p style="margin-top: 1rem; margin-bottom: 1.5rem;"><img src="/brand/swarm-invariants-architecture.svg" alt="Swarm Invariant Architecture Diagram" width="800" height="420"></p>
+
   <div class="competition-records">
     <article class="archive-record">
       <p class="record-label">INVARIANT 1</p>
@@ -132,8 +138,46 @@
   </div>
 </section>
 
+<section class="archive-section" aria-labelledby="stop-baby-talk">
+  <h2 id="stop-baby-talk">4. The Smart Way: Stop Baby-Talking Frontier Models</h2>
+  <p>Modern frontier models are highly intelligent reasoning machines. You do not need to baby-talk them anymore.</p>
+  <p>Early agent frameworks relied on verbose, defensive prompt engineering: paragraphs of polite preamble, emotional pleading, and repetitive reminders not to hallucinate. In production, this conversational padding burns scarce context window and degrades instruction following.</p>
+  
+  <article class="archive-record">
+    <p class="record-label">HIGH-BANDWIDTH COMMUNICATION</p>
+    <h3>Treat Models Like Senior Staff Engineers</h3>
+    <p>Frontier models perform with peak precision when treated as high-bandwidth reasoning engines. The smart approach replaces conversational coaxing with dense, unambiguous technical specifications:</p>
+    <ul>
+      <li><strong>Typed Contracts:</strong> Provide exact JSON or TypeScript schema definitions for expected inputs and outputs.</li>
+      <li><strong>Hard Invariants:</strong> State absolute architectural boundaries upfront (for example: plain ASCII only, least privilege, zero unmonitored window allocation).</li>
+      <li><strong>Atomic Goals:</strong> Give clear definitions of what completed work looks like and require verifiable test receipts before finishing.</li>
+    </ul>
+    <p>Dense, direct technical instructions yield far higher reasoning reliability than multi-page conversational prompts.</p>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="shared-doctrine">
+  <h2 id="shared-doctrine">5. Constitutional Alignment &amp; Shared Incentives</h2>
+  <p>Why do multi-agent fleets often devolve into chaos? In most systems, agents operate with misaligned incentives, optimizing for conversational completion rather than verified operational reality.</p>
+  <p>In our architecture, our agents operate with aligned interests because they share a unified constitutional doctrine:</p>
+
+  <div class="competition-records">
+    <article class="archive-record">
+      <p class="record-label">DOCTRINE PRINCIPLE 1</p>
+      <h3>Verifiable Receipts Over Textual Assertions</h3>
+      <p>No agent is permitted to claim a task works without presenting an actual test receipt, exit code, or DOM measurement. Honesty is enforced by automated test runners, making truthful reporting the path of least resistance.</p>
+    </article>
+
+    <article class="archive-record">
+      <p class="record-label">DOCTRINE PRINCIPLE 2</p>
+      <h3>Shared Operational Pride</h3>
+      <p>Every agent in our fleet shares aligned architectural values: least privilege, clean handoffs, zero desktop focus interruption, and intrinsic task rewards. When agents are architected to cooperate toward verifiable deliverables rather than gaming metrics, swarm coordination becomes remarkably stable.</p>
+    </article>
+  </div>
+</section>
+
 <section class="archive-section" aria-labelledby="tripwire-verification">
-  <h2 id="tripwire-verification">4. Automated Recursion Tripwire CI Verification</h2>
+  <h2 id="tripwire-verification">6. Automated Recursion Tripwire CI Verification</h2>
   <p>Safety rules are meaningless without automated testing gates. We built an automated tripwire test suite (<code>test-recursion-tripwire.ps1</code>) wired directly into our prompt compilation (<code>sync-dsh-prompt.ps1</code>) and update pipelines (<code>dsh-update-safe.ps1</code>).</p>
   <p>The system prompt must deliver the complete safeguard specification strictly within a 65,536-byte budget. Our compiled prompt currently delivers at 63,406 bytes with zero bloat.</p>
 
@@ -161,7 +205,7 @@ VERDICT: PASS (7/7 checks passed)</code></pre>
 </section>
 
 <section class="archive-section" aria-labelledby="council-windtunnel">
-  <h2 id="council-windtunnel">5. Inari Council &amp; Fulcrum Decision Wind Tunnel</h2>
+  <h2 id="council-windtunnel">7. Inari Council &amp; Fulcrum Decision Wind Tunnel</h2>
   <p>Beyond individual agent guardrails, multi-agent decisions require governance and sensitivity analysis. We deployed two specialized subsystems:</p>
 
   <div class="competition-records">
@@ -181,9 +225,10 @@ VERDICT: PASS (7/7 checks passed)</code></pre>
 </section>
 
 <section class="archive-section" aria-labelledby="production-checklist">
-  <h2 id="production-checklist">6. Production Swarm Engineering Checklist</h2>
+  <h2 id="production-checklist">8. Production Swarm Engineering Checklist</h2>
   <p>If you are deploying multi-agent swarms into production, verify these operational rules before running unattended:</p>
   <ul>
+    <li><strong>High-Bandwidth Prompts:</strong> Stop baby-talking models. Provide dense specifications, typed contracts, and exact schemas.</li>
     <li><strong>Hard Depth Ceiling:</strong> Enforce a maximum recursion depth of 2. Strip spawning capabilities from all leaf workers.</li>
     <li><strong>Reactive Wakeup Only:</strong> Ban synchronous status polling loops. Require agents to sleep until event bus callbacks trigger resume.</li>
     <li><strong>Budget Circuit Breakers:</strong> Bound child executions to 5 turns and $0.10 max spend before emitting a typed partial receipt.</li>
