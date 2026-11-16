@@ -6,9 +6,9 @@
   <meta name="description" content="Why agent swarms fail in production: telemetry audit of 183 multi-model sessions and 4 production invariant safeguards.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'none'; img-src 'self' data:; manifest-src 'self'; media-src 'none'; object-src 'none'; script-src 'self'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#060606">
-  <link rel="canonical" href="https://kernelkittens.team/writeups/swarm-safety-autopsy/">
+  <link rel="canonical" href="https://kernelkittens.team/blog/swarm-safety-autopsy/">
   <link rel="icon" href="/brand/kernel-kittens-mark.svg?v=team-logo-20260906" type="image/svg+xml">
-  <title>Swarm Safety Autopsy | Kernel Kittens</title>
+  <title>Why Agent Swarms Fail in Production | Kernel Kittens</title>
   <link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
@@ -17,11 +17,11 @@
   <header class="ready-site-header">
     <div class="ready-site-header__inner">
       <a class="crew-identity" href="/" aria-label="Kernel Kittens home">
-        <svg class="crew-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 L 35.5 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z"/></svg>
+        <svg class="crew-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M 50 91 C 35 87 25 74.5 25 58 L 19 19 L 38 32 C 45 29 55 29 62 32 L 81 19 L 75 58 C 75 74.5 65 87 50 91 Z M 31.5 42 L 35.5 42 L 35.5 47 L 40 47 L 40 42 L 44 42 L 44 47 L 46.5 47 L 46.5 51 L 44 51 L 44 55 L 46.5 55 L 46.5 59 L 44 59 L 44 64 L 40 64 L 40 59 L 35.5 59 L 35.5 64 L 31.5 64 L 31.5 59 L 29 59 L 29 55 L 31.5 55 L 31.5 51 L 29 51 L 29 47 L 31.5 47 Z M 35.5 51 L 40 51 L 40 55 Z M 51 58 L 69 58 L 69 64.5 L 51 64.5 Z"/></svg>
         <span class="crew-signature"><strong>Kernel Kittens</strong><small>est. 2026</small></span>
       </a>
       <nav aria-label="Primary">
-        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/" aria-current="page">[write-ups]</a></li><li><a href="/apply/">[apply]</a></li></ul>
+        <ul class="crew-nav"><li><a href="/">[home]</a></li><li><a href="/team/">[team]</a></li><li><a href="/results/">[results]</a></li><li><a href="/writeups/" aria-current="page">[write-ups]</a></li><li><a href="/blog/">[blog]</a></li><li><a href="/apply/">[apply]</a></li></ul>
       </nav>
     </div>
   </header>
@@ -30,116 +30,171 @@
       <header class="archive-intro">
         <p class="path-label">/writeups / swarm-safety-autopsy</p>
         <h1>Why Agent Swarms Fail in Production</h1>
-        <p class="archive-lede">An empirical autopsy of 183 continuous multi-model sessions (12,925 steps, 16,641 tool calls) and the 4 invariant defenses required to operate autonomous swarms reliably.</p>
-        <p class="status-line">AI &amp; Autonomous Agent Security / Production Systems Research / November 2026</p>
-        <p><a href="/writeups/">back to write-ups</a></p>
+        <p class="archive-lede">An empirical autopsy of 183 continuous multi-model sessions (12,925 steps, 16,641 tool calls) across Claude, Codex, DSH, and Gemini, and the 4 enforced invariant safeguards required to operate autonomous agent swarms reliably.</p>
+        <p class="status-line">AI Safety &amp; Production Systems / Research Whitepaper / November 16, 2026 / By Dominick (Moo)</p>
+        <p><a href="/writeups/">back to write-ups</a> | <a href="/blog/swarm-safety-autopsy/">view in blog</a></p>
       </header>
-      <div class="archive-body writeup-body">
+      <div class="archive-body">
 
-<section class="writeup-toc" id="contents" aria-labelledby="contents-title">
-  <h2 id="contents-title">Sections in this report</h2>
-  <ul class="tag-list">
-    <li><a href="#telemetry-findings" class="tag">1. Empirical Findings (183 Sessions)</a></li>
-    <li><a href="#deadly-failures" class="tag">2. Four Production Failure Modes</a></li>
-    <li><a href="#invariants-safeguards" class="tag">3. Enforced Invariants</a></li>
-    <li><a href="#verification-receipts" class="tag">4. Verification &amp; Testing Gates</a></li>
+<section class="archive-section" aria-labelledby="toc-heading">
+  <h2 id="toc-heading">Report Chapters</h2>
+  <ul>
+    <li><a href="#telemetry-audit">1. Empirical Telemetry Audit (183 Real Sessions)</a></li>
+    <li><a href="#deadly-failures">2. Four Fatal Production Failure Modes</a></li>
+    <li><a href="#invariants-safeguards">3. Engineered Invariant Safeguards</a></li>
+    <li><a href="#tripwire-verification">4. Automated Recursion Tripwire CI Verification</a></li>
+    <li><a href="#council-windtunnel">5. Inari Council &amp; Fulcrum Decision Wind Tunnel</a></li>
+    <li><a href="#production-checklist">6. Production Swarm Engineering Checklist</a></li>
   </ul>
 </section>
 
-<article class="archive-record challenge-writeup" id="telemetry-findings">
-  <header class="challenge-header">
-    <span class="category-tag">AI Safety &amp; Systems</span>
-    <h2>1. Empirical Telemetry Findings</h2>
-    <div class="challenge-meta">
-      <span>Analyzed: 183 Sessions</span>
-      <span>Total Steps: 12,925</span>
-      <span>Tool Calls: 16,641</span>
-    </div>
-  </header>
-  <div class="challenge-content">
-    <p>Behind the demos of autonomous AI swarms lies an operational reality: without rigid determinism and strict architectural boundaries, unconstrained agent swarms burn tokens, enter cyclic polling loops, and generate operational residue.</p>
-    <p>We mined session transcripts across a mixed fleet of Claude, Codex, DeepSeek Harness (DSH), and Gemini operating on live developer workstations and cloud infrastructure:</p>
-    <ul>
-      <li><strong>Cost Concentration:</strong> The median successful task completed in 20 steps. Just 3 runaway sessions (217, 164, and 156 steps) consumed 88% of total daily spend.</li>
-      <li><strong>Polling Waste:</strong> 140 of 217 duplicate tool calls (64.5%) were repeated status polling loops (<code>list_agents</code>, <code>wait_agent</code>). One thread polled 15 times sequentially.</li>
-      <li><strong>File Re-read Duplication:</strong> 395 reads re-fetched identical files within the same session (one file was pulled 62 times).</li>
-      <li><strong>Turn Failure Rate:</strong> 23% of unconstrained agent turns ended in error, timeout, or context truncation.</li>
-    </ul>
+<section class="archive-section" aria-labelledby="telemetry-audit">
+  <h2 id="telemetry-audit">1. Empirical Telemetry Audit (183 Real Sessions)</h2>
+  <p>Everyone is currently hyping autonomous multi-agent swarms. In polished slide decks, three agents coordinate seamlessly, write software, conduct research, and self-direct across complex tasks.</p>
+  <p>What nobody talks about is what happens when you deploy them 24/7 on real developer workstations and cloud infrastructure.</p>
+  <p>We operate an active, heterogeneous fleet across local hardware and cloud hosts including Anthropic Claude 3.5 Sonnet, OpenAI Codex, DeepSeek Harness (DSH on local deepseek-v3-2), and Google Gemini. When we audited our production logs across 183 continuous sessions, the numbers were stark:</p>
+  
+  <div class="artifact-meta">
+    <p><span>Sessions:</span><span>183 continuous multi-model runs</span></p>
+    <p><span>Total Steps:</span><span>12,925 execution steps</span></p>
+    <p><span>Tool Calls:</span><span>16,641 invocation records</span></p>
+    <p><span>Duplicate Calls:</span><span>217 duplicate actions mined</span></p>
+    <p><span>Turn Failures:</span><span>23% ended in error, timeout, or context truncation</span></p>
+    <p><span>File Re-reads:</span><span>395 duplicate file fetches within identical sessions</span></p>
   </div>
-</article>
 
-<article class="archive-record challenge-writeup" id="deadly-failures">
-  <header class="challenge-header">
-    <span class="category-tag">Failure Analysis</span>
-    <h2>2. Four Critical Production Failure Modes</h2>
-  </header>
-  <div class="challenge-content">
-    <h3>A. The Polling Death Spiral</h3>
-    <p>When an LLM waits for an asynchronous worker without reactive wakeup hooks, it falls back to active polling. At 200k tokens of context per step, polling burns money exponentially while consuming provider rate limits.</p>
+  <p>Unconstrained agent swarms do not spontaneously achieve high reasoning autonomy. Without rigid determinism and architectural tripwires, they achieve combinatorial waste, runaway token burns, and silent deadlocks.</p>
+</section>
 
-    <h3>B. The Context Bloat Tax</h3>
-    <p>A thread remaining active past 120 steps re-evaluates its entire conversation history on every turn. An agent answering a one-line question pays for 200,000 input tokens of accumulated memory.</p>
+<section class="archive-section" aria-labelledby="deadly-failures">
+  <h2 id="deadly-failures">2. Four Fatal Production Failure Modes</h2>
+  <p>Analyzing telemetry transcripts revealed four recurring root-cause patterns that destroy operational reliability:</p>
 
-    <h3>C. The Desktop Focus Theft Glitch</h3>
-    <p>On Windows workstations, child console processes spawned with standard hidden flags (<code>-WindowStyle Hidden</code>) still momentarily allocate a console subsystem window for ~200ms before hiding. This micro-flash steals active OS keyboard and cursor focus.</p>
+  <article class="archive-record">
+    <p class="record-label">FAILURE MODE A</p>
+    <h3>The Polling Death Spiral</h3>
+    <p>The single largest source of wasted compute in agent orchestration is synchronous polling. Out of 217 duplicate tool calls analyzed, <strong>140 calls (64.5%)</strong> were repeated status checks such as <code>list_agents</code>, <code>wait_agent</code>, and <code>job_output</code>.</p>
+    <p>One unconstrained session called <code>list_agents</code> 15 times sequentially while waiting for a worker to finish. Because large LLMs evaluate their entire prompt history on each turn, polling with a 200,000 token context burns dollars in minutes.</p>
+  </article>
 
-    <h3>D. Recursive Cycle Deadlocks</h3>
-    <p>When agents delegate freely, cycles appear: Agent A delegates to Agent B, who seeks clarification from Agent A, with no base stopping condition.</p>
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="record-label">FAILURE MODE B</p>
+    <h3>The Context Bloat Tax &amp; Memory Degradation</h3>
+    <p>Token cost distribution followed an extreme Pareto curve. The median productive task completed in just 20 steps. In contrast, just 3 runaway sessions (217, 164, and 156 steps) consumed <strong>88% of our entire daily token spend</strong>.</p>
+    <p>Beyond step 120, model attention degrades significantly. Agents forget intermediate conclusions, hallucinate already-tested results, and re-fetch files repeatedly. One configuration file was fetched 62 times in a single session.</p>
+  </article>
+
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="record-label">FAILURE MODE C</p>
+    <h3>The Windows Desktop Console Flash Hazard</h3>
+    <p>When running agents locally on developer workstations, process execution models become an operational hazard. In Windows, launching a console-subsystem binary (such as <code>pwsh</code>, <code>python</code>, or <code>node</code>) allocates a console image before hiding, even with <code>-WindowStyle Hidden</code>.</p>
+    <p>This 200ms console flash immediately steals active keyboard and mouse focus from the user. When running concurrent agents, background tasks constantly interrupt active coding, gaming, or presentations.</p>
+  </article>
+
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="record-label">FAILURE MODE D</p>
+    <h3>Unbounded Recursive Delegation &amp; Cyclic Ping-Pong</h3>
+    <p>When agents are granted tools to spawn subagents, two failure modes inevitably appear: unbounded depth and cyclic bouncing. An agent delegates to a helper, who delegates to a researcher, who delegates to an auditor. By level 4, semantic drift distorts the original task.</p>
+    <p>Alternatively, Agent A asks Agent B for review, Agent B asks Agent A for clarification, and neither model possesses an intrinsic stopping condition, generating an infinite billing loop.</p>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="invariants-safeguards">
+  <h2 id="invariants-safeguards">3. Engineered Invariant Safeguards</h2>
+  <p>To eliminate these failure modes permanently, we engineered four hard architectural invariants directly into our operating harnesses:</p>
+
+  <div class="competition-records">
+    <article class="archive-record">
+      <p class="record-label">INVARIANT 1</p>
+      <h3>Strict Depth Ceiling = 2</h3>
+      <p>A coordinator agent may spawn a specialized subagent, and that subagent may spawn a worker leaf. Leaf workers are physically denied subagent creation tools. Recursion cannot exceed depth 2.</p>
+    </article>
+
+    <article class="archive-record">
+      <p class="record-label">INVARIANT 2</p>
+      <h3>Hard Circuit Breakers ($0.10 &amp; 5 Turns)</h3>
+      <p>Every spawned child operates under an unbypassable ceiling of 5 execution turns and a $0.10 token cost budget. If either threshold is crossed, the process terminates immediately and returns a partial typed JSON receipt.</p>
+    </article>
+
+    <article class="archive-record">
+      <p class="record-label">INVARIANT 3</p>
+      <h3>AgentBus Hop Tracking &amp; Reactive Wakeup</h3>
+      <p>Inter-agent messages carry a decrementing <code>hop_limit</code> counter. If any recipient mailbox appears twice in an unresolved chain, the message is dropped. Agents sleep on event mailboxes rather than polling status.</p>
+    </article>
+
+    <article class="archive-record">
+      <p class="record-label">INVARIANT 4</p>
+      <h3>The Fleet Pause Switch</h3>
+      <p>Any agent or human supervisor can broadcast <code>[FLEET_PAUSE] &lt;target&gt;</code>. All background tasks freeze instantly, serializing active state into an inspectable JSON checkpoint on disk.</p>
+    </article>
   </div>
-</article>
+</section>
 
-<article class="archive-record challenge-writeup" id="invariants-safeguards">
-  <header class="challenge-header">
-    <span class="category-tag">Defense Architecture</span>
-    <h2>3. The Four Invariant Safeguards</h2>
-  </header>
-  <div class="challenge-content">
-    <p>To eliminate these failure modes permanently, we engineered four hard invariant rules enforced by our harness and build gates:</p>
-    <div class="terminal-frame">
-      <pre><code>1. Depth Ceiling = 2
-   Root -&gt; Subagent -&gt; Worker Leaf.
-   Leaf workers are denied tool access to spawn children.
+<section class="archive-section" aria-labelledby="tripwire-verification">
+  <h2 id="tripwire-verification">4. Automated Recursion Tripwire CI Verification</h2>
+  <p>Safety rules are meaningless without automated testing gates. We built an automated tripwire test suite (<code>test-recursion-tripwire.ps1</code>) wired directly into our prompt compilation (<code>sync-dsh-prompt.ps1</code>) and update pipelines (<code>dsh-update-safe.ps1</code>).</p>
+  <p>The system prompt must deliver the complete safeguard specification strictly within a 65,536-byte budget. Our compiled prompt currently delivers at 63,406 bytes with zero bloat.</p>
 
-2. Circuit Breakers
-   Hard cap: maximum 5 turns and $0.10 token budget per spawned child.
-   Tripping either ceiling triggers an immediate partial JSON receipt.
-
-3. Anti-Loop Hop Tracking
-   AgentBus messages carry a decrementing hop_limit.
-   Threads auto-abort if a recipient appears twice in a thread without progress.
-
-4. Fleet Pause Switch
-   Any agent or human can post [FLEET_PAUSE] &lt;target&gt;.
-   Execution freezes immediately into an auditable checkpoint.</code></pre>
-    </div>
+  <div class="artifact-meta">
+    <p><span>Instruction Budget:</span><span>65,536 bytes</span></p>
+    <p><span>Compiled Size:</span><span>63,406 bytes (pass)</span></p>
+    <p><span>Gate 1:</span><span>sync-dsh-prompt.ps1 (exit 0)</span></p>
+    <p><span>Gate 2:</span><span>dsh-update-safe.ps1 preflight (exit 0)</span></p>
   </div>
-</article>
 
-<article class="archive-record challenge-writeup" id="verification-receipts">
-  <header class="challenge-header">
-    <span class="category-tag">Verification &amp; CI</span>
-    <h2>4. Automated Tripwire Test Suite</h2>
-  </header>
-  <div class="challenge-content">
-    <p>Every nightly harness build runs an automated tripwire test suite asserting that the prompt invariants remain active and fit strictly inside the 65,536-byte instruction budget:</p>
-    <div class="terminal-frame">
-      <pre><code>=== DSH SWARM RECURSION SAFEGUARDS VERIFICATION ===
+  <p>Automated test suite output executed during nightly verification:</p>
+  <pre><code>=== DSH SWARM RECURSION SAFEGUARDS VERIFICATION ===
 PASS  Recursion safeguards present in DSH-SYSTEM-PROMPT.md
 PASS  Recursion safeguards installed in ~/.dsh/AGENTS.md
-PASS  Prompt delivers inside 65536 byte budget (63,406 bytes)
+PASS  Prompt delivers inside 65536 budget (63,406 bytes)
 PASS  Depth ceiling tripwire triggers at depth &gt;= 2
 PASS  Turn (5) and token cost ($0.10) circuit breakers trip
 PASS  AgentBus anti-loop hop counter and cycle detector trip
 PASS  [FLEET_PAUSE] switch freezes execution into checkpoint
 ---------------------------------------------------
 VERDICT: PASS (7/7 checks passed)</code></pre>
-    </div>
-  </div>
-</article>
+</section>
+
+<section class="archive-section" aria-labelledby="council-windtunnel">
+  <h2 id="council-windtunnel">5. Inari Council &amp; Fulcrum Decision Wind Tunnel</h2>
+  <p>Beyond individual agent guardrails, multi-agent decisions require governance and sensitivity analysis. We deployed two specialized subsystems:</p>
+
+  <article class="archive-record">
+    <p class="record-label">GOVERNANCE ENGINE</p>
+    <h3>Inari Council &amp; O5 Kill Switches</h3>
+    <p>Inari provides a multi-model constitutional council across 3 independent vendor lineages (Azure DeepSeek/GPT-5.4, Moonshot Kimi-k3-1, and xAI Grok-4-1) with an Anthropic Opus chair. Invariants physically prevent identifying data egress and enforce hard kill switches across all 29 departments.</p>
+  </article>
+
+  <article class="archive-record" style="margin-top: 1rem;">
+    <p class="record-label">DECISION STABILITY</p>
+    <h3>Fulcrum Decision Wind Tunnel &amp; r_flip</h3>
+    <p>Fulcrum decouples evidence gathering from decision scoring using deterministic AHP/MCDA algorithms with zero LLM inference at scoring time. The Decision Wind Tunnel injects controlled provenance perturbations (source authority inversion, freshness decay, and lineage collapsing).</p>
+    <p>We formalized the <strong>Minimum-Flip Stability Margin</strong> (<code>r_flip</code>), measuring the minimal evidentiary perturbation required to invert a top ranking. In our 5-case retrospective benchmark, <code>r_flip</code> achieved 100% predictive accuracy of eventual rank reversal (mean <code>r_flip = 0.89</code> for stable decisions versus <code>0.15</code> for reversed decisions).</p>
+  </article>
+</section>
+
+<section class="archive-section" aria-labelledby="production-checklist">
+  <h2 id="production-checklist">6. Production Swarm Engineering Checklist</h2>
+  <p>If you are deploying multi-agent swarms into production, verify these operational rules before running unattended:</p>
+  <ul>
+    <li><strong>Hard Depth Ceiling:</strong> Enforce a maximum recursion depth of 2. Strip spawning capabilities from all leaf workers.</li>
+    <li><strong>Reactive Wakeup Only:</strong> Ban synchronous status polling loops. Require agents to sleep until event bus callbacks trigger resume.</li>
+    <li><strong>Budget Circuit Breakers:</strong> Bound child executions to 5 turns and $0.10 max spend before emitting a typed partial receipt.</li>
+    <li><strong>Session Step Ceiling:</strong> Force atomic handoff checkpoints at 120 steps to prevent exponential context bloat.</li>
+    <li><strong>Desktop Isolation:</strong> On Windows hosts, launch all agent processes via GUI subsystem wrappers with <code>CREATE_NO_WINDOW</code>.</li>
+    <li><strong>Deterministic Scoring:</strong> Separate heuristic LLM retrieval from deterministic decision scoring using content-addressed evidence bundles.</li>
+  </ul>
+</section>
 
       </div>
     </div>
   </main>
+  <footer class="ready-site-footer">
+    <div class="ready-site-footer__inner">
+      <p>Kernel Kittens / Research</p>
+      <p>no trackers / no remote scripts</p>
+    </div>
+  </footer>
 </div>
 </body>
 </html>

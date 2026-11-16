@@ -15,6 +15,8 @@ const pages = [
   "writeups/bushbash-ctf-2026/index.html",
   "writeups/tfc-ctf-2026/index.html",
   "writeups/swarm-safety-autopsy/index.html",
+  "blog/index.html",
+  "blog/swarm-safety-autopsy/index.html",
   "accessibility/index.html",
   "404.html",
 ];
