@@ -54,7 +54,7 @@
   <h2 id="telemetry-audit">1. Empirical Telemetry Audit (183 Real Sessions)</h2>
   <p>Everyone is currently hyping autonomous multi-agent swarms. In polished slide decks, three agents coordinate seamlessly, write software, conduct research, and self-direct across complex tasks.</p>
   <p>What nobody talks about is what happens when you deploy them 24/7 on real developer workstations and cloud infrastructure.</p>
-  <p>We operate an active, heterogeneous fleet across local hardware and cloud hosts including Anthropic Claude 3.5 Sonnet, OpenAI Codex, DeepSeek Harness (DSH on local deepseek-v3-2), and Google Gemini. When we audited our production logs across 183 continuous sessions, the numbers were stark:</p>
+  <p>We operate an active, heterogeneous fleet across local hardware and cloud hosts including Anthropic Claude, OpenAI Codex, DeepSeek Harness (DSH), and Google Gemini. When we audited our production logs across 183 continuous sessions, the numbers were stark:</p>
   
   <div class="artifact-meta">
     <p><span>Sessions:</span><span>183 continuous multi-model runs</span></p>
@@ -179,11 +179,11 @@
 <section class="archive-section" aria-labelledby="tripwire-verification">
   <h2 id="tripwire-verification">6. Automated Recursion Tripwire CI Verification</h2>
   <p>Safety rules are meaningless without automated testing gates. We built an automated tripwire test suite (<code>test-recursion-tripwire.ps1</code>) wired directly into our prompt compilation (<code>sync-dsh-prompt.ps1</code>) and update pipelines (<code>dsh-update-safe.ps1</code>).</p>
-  <p>The system prompt must deliver the complete safeguard specification strictly within a 65,536-byte budget. Our compiled prompt currently delivers at 63,406 bytes with zero bloat.</p>
+  <p>The system prompt must deliver the complete safeguard specification strictly within a 65,536-byte budget. Our compiled prompt currently delivers at 64,209 bytes with 1,327 bytes of headroom remaining.</p>
 
   <div class="artifact-meta">
     <p><span>Instruction Budget:</span><span>65,536 bytes</span></p>
-    <p><span>Compiled Size:</span><span>63,406 bytes (pass)</span></p>
+    <p><span>Compiled Size:</span><span>64,209 bytes (1,327 free)</span></p>
     <p><span>Gate 1:</span><span>sync-dsh-prompt.ps1 (exit 0)</span></p>
     <p><span>Gate 2:</span><span>dsh-update-safe.ps1 preflight (exit 0)</span></p>
   </div>
@@ -194,7 +194,7 @@
     <pre><code>=== DSH SWARM RECURSION SAFEGUARDS VERIFICATION ===
 PASS  Recursion safeguards present in DSH-SYSTEM-PROMPT.md
 PASS  Recursion safeguards installed in ~/.dsh/AGENTS.md
-PASS  Prompt delivers inside 65536 byte budget (63,406 bytes)
+PASS  Prompt delivers inside 65536 byte budget (64,209 of 65,536 bytes, 1,327 free)
 PASS  Depth ceiling tripwire triggers at depth &gt;= 2
 PASS  Turn (5) and token cost ($0.10) circuit breakers trip
 PASS  AgentBus anti-loop hop counter and cycle detector trip
@@ -212,7 +212,7 @@ VERDICT: PASS (7/7 checks passed)</code></pre>
     <article class="archive-record">
       <p class="record-label">GOVERNANCE ENGINE</p>
       <h3>Inari Council &amp; O5 Kill Switches</h3>
-      <p>Inari provides a multi-model constitutional council across 3 independent vendor lineages (Azure DeepSeek/GPT-5.4, Moonshot Kimi-k3-1, and xAI Grok-4-1) with an Anthropic Opus chair. Invariants physically prevent identifying data egress and enforce hard kill switches across all 29 departments.</p>
+      <p>Inari provides a multi-model constitutional council across 3 independent vendor lineages (Azure DeepSeek/GPT-5.4, Moonshot Kimi-k3-1, and xAI Grok-4-1) with an Anthropic Opus chair. Invariants physically prevent identifying data egress and enforce hard kill switches across every department.</p>
     </article>
 
     <article class="archive-record">
