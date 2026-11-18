@@ -14,6 +14,9 @@ const pages = [
   "writeups/kaspersky-sas-ctf-2026/index.html",
   "writeups/bushbash-ctf-2026/index.html",
   "writeups/tfc-ctf-2026/index.html",
+  "writeups/swarm-safety-autopsy/index.html",
+  "blog/index.html",
+  "blog/swarm-safety-autopsy/index.html",
   "accessibility/index.html",
   "404.html",
 ];
@@ -254,8 +257,8 @@ test("the application is a full archive record with the existing API flow", () =
   assert.doesNotMatch(apply, /candidate assignment/);
   assert.doesNotMatch(apply, /READY-V[0-9]/);
   assert.match(apply, /Find three fragments in order, then assemble them with the format below\./);
-  assert.match(apply, /This challenge is designed to be solvable in under five minutes\./);
-  assert.match(apply, /Every correct solve unlocks the KernelKittens Discord and grants Member\./);
+  assert.match(apply, /Stock tooling is enough\. Nothing needs to be installed beyond what ships with your OS\./);
+  assert.match(apply, /A correct solve lets you join the public server\./);
   assert.doesNotMatch(apply, /Parts A \+ B \+ C \+ D|10-15 minutes|repeat this challenge/i);
   assert.match(apply, /data-ready-root/);
   assert.match(apply, /data-api-origin="https:\/\/apply\.kernelkittens\.team"/);
@@ -263,32 +266,32 @@ test("the application is a full archive record with the existing API flow", () =
   assert.match(apply, /<ol class="application-steps">/);
   assert.equal((apply.match(/<li class="application-step"/g) ?? []).length, 3);
   const visibleBeforeLogin = apply.slice(0, apply.indexOf("data-ready-assignment hidden"));
-  assert.match(visibleBeforeLogin, /Submit format: <code>KernelFlag\{first_second_third\}<\/code>/);
+  assert.match(visibleBeforeLogin, /Submit format: <code>KernelFlag\{64 lowercase hex characters\}<\/code>/);
   assert.match(apply, /data-ready-login-link/);
   assert.match(apply, /data-ready-download/);
   assert.match(apply, /data-ready-form/);
   assert.match(apply, /data-ready-flag/);
-  assert.match(apply, /KernelFlag\{first_second_third\}/);
-  assert.match(apply, /Submit format: <code>KernelFlag\{first_second_third\}<\/code>/);
-  assert.match(apply, /Under 5:00 gets Member plus CTF Player\./);
-  assert.match(apply, /5:00 or longer gets Member\./);
+  assert.match(apply, /KernelFlag\{64 lowercase hex characters\}/);
+  assert.match(apply, /Submit format: <code>KernelFlag\{64 lowercase hex characters\}<\/code>/);
+  assert.doesNotMatch(apply, /KernelFlag\{first_second_third\}/);
+  assert.match(apply, /No time limit: take as long as you need, just solve it\./);
+  assert.match(apply, /Grandma found this on an old drive and forgot her password\./);
   assert.match(apply, /data-ready-discord-join/);
-  assert.doesNotMatch(apply, /TOP|topTokens|base64|password|256-password/i);
+  assert.doesNotMatch(apply, /TOP|topTokens|base64|256-password/i);
   assert.match(apply, /<script type="module" src="\/assets\/apply\.js"><\/script>/);
   assert.doesNotMatch(apply, /<dialog|data-ready-dialog|data-ready-open|data-ready-close|data-ready-reopen/);
   assert.equal(apply.includes("/apply/stray.rar"), false);
 });
 
-test("the application explains timed scoring and keeps reissue hidden until download", () => {
+test("the application explains the challenge rules and keeps reissue hidden until download", () => {
   const apply = read("apply/index.html");
-  assert.match(apply, /Scoring is based on the time from your first download to a correct submission\./);
+  assert.match(apply, /No time limit: take as long as you need, just solve it\./);
   assert.doesNotMatch(apply, /You can repeat this challenge as many times as you want\./);
   assert.match(apply, /data-ready-reissue-panel hidden/);
   assert.match(apply, /data-ready-reissue-status[^>]*role="status"[^>]*aria-live="polite"/);
   assert.match(apply, /data-ready-reissue/);
   assert.match(apply, />Request a new archive<\/button>/);
   assert.match(apply, /A new archive is available after one hour\./);
-  assert.match(apply, /Your original timer does not reset\./);
 });
 
 test("the application client has no modal controls", () => {
