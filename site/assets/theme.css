@@ -315,3 +315,31 @@ html { scroll-padding-top: 2rem; }
   html { scroll-behavior: auto; }
   .ready-archive-page *, .ready-archive-page *::before, .ready-archive-page *::after { transition: none !important; animation: none !important; }
 }
+
+/* Optional support, kept in normal page flow below recruitment. */
+.kernel-home .support-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1.5rem;
+  max-width: 42rem;
+  margin: 0 0 3rem auto;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+.support-card__icon { display: block; width: 1.35rem; height: 1.35rem; margin-bottom: .8rem; fill: none; stroke: var(--link); stroke-width: 1.6; stroke-linejoin: round; }
+.kernel-home .support-card h2 { margin: 0; color: var(--ink); font: 650 1.3rem/1.35 var(--font-body); letter-spacing: -.025em; }
+.kernel-home .support-card p { max-width: 36ch; margin: .6rem 0 1rem; color: var(--muted); font-size: 1rem; line-height: 1.65; }
+.kernel-home .support-card__link { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: .65rem 1rem; border: 1px solid var(--link); color: var(--link); font: .875rem/1.5 var(--font-data); text-decoration: none; }
+.kernel-home .support-card__link:hover { background: var(--link); color: var(--page); }
+.support-card__note { display: block; margin-top: .55rem; color: var(--muted); font: .75rem/1.6 var(--font-data); }
+.support-card__qr { width: 11.5rem; min-width: 0; }
+.support-card__qr summary { min-height: 2.75rem; padding-block: .65rem; color: var(--link); cursor: pointer; font: .875rem/1.5 var(--font-data); }
+.support-card__qr summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.support-card__qr img { display: block; width: 100%; height: auto; margin-top: .6rem; }
+.kernel-home .support-card__qr p { margin-bottom: 0; font-size: .875rem; }
+@media (max-width: 44rem) {
+  .kernel-home .support-card { grid-template-columns: minmax(0, 1fr); gap: .6rem; padding: 1.25rem; }
+  .support-card__qr { width: min(100%, 13rem); }
+}
